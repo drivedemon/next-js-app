@@ -9,7 +9,7 @@ export default function Search() {
 
   const handleSummit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSearch('')
+    // setSearch(search)
     router.push(`/search/${ search }/`)
   }
 
