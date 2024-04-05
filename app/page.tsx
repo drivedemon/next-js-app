@@ -5,7 +5,7 @@ import Image from 'next/image'
 export default function Home() {
     return (
         <main>
-            <div style={{height: 90 + 'vh'}}>
+            <div style={{minHeight: 90 + 'vh'}}>
                 <div className="grid lg:grid-cols-5 h-full">
                     <div className="order-last lg:order-first lg:col-span-2 flex flex-col py-20 px-10">
                         <Logo />

@@ -18,8 +18,6 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
             {/*<Navbar />*/}
             {/*<Logo />*/}
             {children}
-            <div className="bg-white"></div>
-            <div className={"bg-white"}></div>
             </body>
         </html>
     )
