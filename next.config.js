@@ -1,5 +1,7 @@
-/** @type {{output: string}} */
 const nextConfig = {
+    images: {
+        domains: ['api.cxaone.com'],
+    },
     // output: 'export',
 }
 
