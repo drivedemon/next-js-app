@@ -1,38 +1,93 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Primecare Member App
+
+![Alt Text](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDc0NHZ4bGd6eHl2NTNiazBtZzZzajFmaDU4eGg0dWhhbHU1a2RzaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/52sL8zkCHSLPzF9lXH/giphy.gif)
+
+## Framework & Tools used
+
+- Next js 14
+- Tailwind 3
+- Axios
+- Lucide Icon
+
+## Requirement
+
+- Node v18.17++
+
+## Component plugin
+
+- ShadCN
+
+Auto generate base component
+
+Check out document: [ShadCN document](https://ui.shadcn.com/docs)
+
+### command to use
+```
+npx shadcn-ui@latest add button // (Generate button component)
+```
+
+### codeStyle:
+```
+File name: Camel case
+Export component name: Camel case
+
+Note: Remind when you generate component please follow format and code style
+```
+
+## Store
+
+- Zustand
+
+Check out document: [zustand document](https://github.com/pmndrs/zustand)
+
+## Formatter & Linter
+
+- Biome js
+
+Apply code style on `Merge request` checked before merged.
+
+fix format code command
+```
+npm run lint-fix && npm run format-fix
+```
+
+`Note: Check out and import Code format apply:` [codeStyle.xml](https://trello.com/c/hvIHYFXj/46-phpstorm)
+
+Check out document: [formatter document](https://biomejs.dev/)
+
+## Pull Request flow
+
+- require `rebase history commit to 1 commit` before send to review
+- require fix `style / format / linter` of code before send to review
+- require `updated branch` before send to review
+- require `resolve conflict` before send to review
+- require capture screenshot affect page (all responsive `labtop / ipad / mobile`)
+
+## Gitflow
+
+All branch description
+
+- `master` base of source code (don't push everything to this branch)
+- `develop` base of development source code (merge with merge request for every feature)
+- `hotifx/[yyyy-mm-dd-detail]` merge directly into `master` and `develop` when have something urgent fix
+- `release/v*` base of feature release source code for QA
+- `feature/[detail]` development branch for dev
+
+
+- [Gitflow document](https://help.gitkraken.com/gitkraken-client/git-flow/)
 
 ## Getting Started
 
-First, run the development server:
+First, install project
+```
+npm ci
+```
 
-```bash
+then run the development server:
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
