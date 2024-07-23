@@ -270,7 +270,7 @@ const Create: React.FC = () => {
   }
 
   return (
-    <>
+    <Card className="shadow-brand-primary h-full">
       <CardHeader>
         <CardTitle>{steps[currentStep - 1]}</CardTitle>
       </CardHeader>
@@ -756,7 +756,7 @@ const Create: React.FC = () => {
           Confirm
         </Button>
       </CardFooter>
-    </>
+    </Card>
   )
 }
 

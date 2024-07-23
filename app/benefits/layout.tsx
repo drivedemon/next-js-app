@@ -14,6 +14,7 @@ import DashboardLayout from "@/components/Layouts/DashboardLayout"
 import {PageProvider, usePage} from "@/components/Layouts/DashboardContext"
 import DashboardContent from "@/components/Layouts/DashboardContent"
 import DashboardMenuTab from "@/components/Layouts/DashboardMenuTab"
+import {usePathname} from "next/navigation"
 
 interface ParallelLayoutProps {
   children: ReactNode
@@ -51,8 +52,13 @@ const BenefitsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   )
 }
 
+const GetDefaultPage = (): string => {
+  const currentPath = usePathname()
+  return currentPath.split("/")[2] ?? "overview"
+}
+
 const BenefitsLayoutWrapper: React.FC<ParallelLayoutProps> = ({children}) => (
-  <PageProvider defaultPage="create">
+  <PageProvider defaultPage={GetDefaultPage()}>
     <BenefitsLayout>{children}</BenefitsLayout>
   </PageProvider>
 )

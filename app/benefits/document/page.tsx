@@ -4,7 +4,7 @@ import Link from "next/link"
 
 const Document: React.FC = () => {
   return (
-    <>
+    <Card className="shadow-brand-primary h-full">
       <CardHeader>
         <CardTitle>Benefit Documents</CardTitle>
       </CardHeader>
@@ -28,7 +28,7 @@ const Document: React.FC = () => {
           </li>
         </ul>
       </CardContent>
-    </>
+    </Card>
   )
 }
 

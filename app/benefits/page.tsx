@@ -1,14 +1,12 @@
 "use client"
 
-import React, {Suspense} from "react"
+import type React from "react"
 import dynamic from "next/dynamic"
 import {usePage} from "@/components/Layouts/DashboardContext"
-import DocumentLoading from "@/app/benefits/document/loading";
-import DefaultLoading from "@/app/benefits/loading";
-import CreateLoading from "@/app/benefits/create/loading";
-import OverviewLoading from "@/app/benefits/overview/loading";
-import SummaryLoading from "@/app/benefits/summary/loading";
-import {Card} from "@/components/ui/Card";
+import DocumentLoading from "@/app/benefits/document/loading"
+import CreateLoading from "@/app/benefits/create/loading"
+import OverviewLoading from "@/app/benefits/overview/loading"
+import SummaryLoading from "@/app/benefits/summary/loading"
 
 const CreatePage = dynamic(() => import("./create/page"), {
   ssr: false,
@@ -48,11 +46,7 @@ const BenefitPage: React.FC = () => {
       mainContent = <div>Select a page from the Left side Menu</div>
   }
 
-  return (
-    <Card className="shadow-brand-primary h-full">
-      <Suspense fallback={<DefaultLoading />}>{mainContent}</Suspense>
-    </Card>
-  )
+  return <>{mainContent}</>
 }
 
 export default BenefitPage

@@ -1,9 +1,7 @@
 import type React from "react"
 
-const DefaultLoading: React.FC = () => {
-  return (
-    <p>loading....</p>
-  )
+const DefaultBenefitLoading: React.FC = () => {
+  return <p>loading....</p>
 }
 
-export default DefaultLoading
+export default DefaultBenefitLoading

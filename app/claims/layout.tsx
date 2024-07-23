@@ -14,6 +14,7 @@ import DashboardLayout from "@/components/Layouts/DashboardLayout"
 import DashboardMenuTab from "@/components/Layouts/DashboardMenuTab"
 import DashboardContent from "@/components/Layouts/DashboardContent"
 import {PageProvider, usePage} from "@/components/Layouts/DashboardContext"
+import {usePathname} from "next/navigation"
 
 interface ParallelLayoutProps {
   children: ReactNode
@@ -50,8 +51,13 @@ const ClaimsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   )
 }
 
+const GetDefaultPage = (): string => {
+  const currentPath = usePathname()
+  return currentPath.split("/")[2] ?? "track"
+}
+
 const ClaimsLayoutWrapper: React.FC<ParallelLayoutProps> = ({children}) => (
-  <PageProvider defaultPage="track">
+  <PageProvider defaultPage={GetDefaultPage()}>
     <ClaimsLayout>{children}</ClaimsLayout>
   </PageProvider>
 )
