@@ -6,7 +6,7 @@ const Document: React.FC = () => {
   return (
     <Card className="shadow-brand-primary h-full">
       <CardHeader>
-        <CardTitle>Benefit Documents</CardTitle>
+        <CardTitle>Policy Documents</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-lg lg:text-xl font-semibold">FAQ and other Information</p>

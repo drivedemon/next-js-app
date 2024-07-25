@@ -5,28 +5,31 @@ import {useState} from "react"
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/Card"
 import Stepper from "@/components/ui/Stepper"
 import {ChevronUp} from "lucide-react"
-import {cn} from "@/lib/utils"
+import {cn, money} from "@/lib/utils"
 import {Button} from "@/components/Forms/Button"
 import HealthcareIcon from "@/components/Icons/HealthcareIcon"
-import FamilyIcon from "@/components/Icons/FamilyIcon"
 import WellnessIcon from "@/components/Icons/WellnessIcon"
-import DiscretionaryIcon from "@/components/Icons/DiscretionaryIcon"
-import InpatientIcon from "@/components/Icons/InpatientIcon"
 import {Label} from "@/components/Forms/Label"
 import {Input} from "@/components/Forms/Input"
-import {RadioGroup, RadioGroupItem} from "@/components/Forms/RadioGroup"
-import {Badge} from "@/components/ui/Badge"
 import FileUpload from "@/components/Forms/FileUpload"
 import FileMultipleUpload from "@/components/Forms/FileMultipleUpload"
+import CDatePicker from "@/components/Forms/CDatePicker"
 import PdfIcon from "@/components/Icons/PdfIcon"
 import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from "@/components/ui/Dialog"
-import Image from "next/image"
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/Forms/Select"
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/Tooltip"
 
 const Create: React.FC = () => {
-  const steps = ["Select Claim Type", "Add Receipt", "Add Supporting Documents", "Review Claim"]
-  const [isOpenFlexible, setIsOpenFlexible] = useState<boolean>(false)
-  const [isOpenMedical, setIsOpenMedical] = useState<boolean>(false)
+  const steps = ["Select Claim Type", "Add Receipt and Referral", "Claim Detail", "Review Claim"]
+
+  const yearList = ["2014", "2013", "2012", "2011"]
+  const policyName = ["Policy 12100394", "Policy 12100395", "Policy 12100396", "Policy 12100397"]
+  const [policy, setPolicy] = useState<string>(policyName[0])
+  const [yearSelected, setYearSelected] = useState<string>(yearList[0])
+  const [datePicker, setDatePicker] = useState<string>("")
+
   const [isOpenGuideline, setIsOpenGuideline] = useState<boolean>(false)
+  const [isOpenSupportDocument, setIsOpenSupportDocument] = useState<boolean>(false)
   const [isOpenSupportGuideline, setIsOpenSupportGuideline] = useState<boolean>(false)
   const [currentStep, setStep] = useState<number>(1)
   const [file, setFile] = useState<File | null>(null)
@@ -70,138 +73,41 @@ const Create: React.FC = () => {
       <CardContent className="flex flex-col gap-y-8">
         <Stepper steps={steps} currentStep={currentStep} />
 
-        {/*Account balance*/}
-        <Card className="h-full">
-          <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-2">
-              <div className="flex flex-col md:flex-row lg:flex-row items-center gap-x-2 font-bold lg:text-nowrap text-base lg:text-lg">
-                <span className="shrink-0">Your Account Balance</span>
-                <span className="font-normal text-xs lg:text-sm">
-                  (All prices are quoted in <span className="font-semibold">SGD</span>)
-                </span>
-              </div>
-
-              <div className="flex flex-col lg:flex-row lg:items-center font-semibold lg:justify-between lg:pt-2">
-                <div
-                  className="flex items-center cursor-pointer gap-x-1 group"
-                  onClick={() => {
-                    setIsOpenFlexible(!isOpenFlexible)
-                  }}
-                >
-                  <span className="text-nowrap text-brand-primary group-hover:underline">
-                    Flexible Spending Account
-                  </span>
-                  <ChevronUp
-                    className={cn(
-                      isOpenFlexible && "transform rotate-180",
-                      "transition-transform duration-300 h-6 w-6 text-brand-primary shrink-0",
-                    )}
-                  />
-                </div>
-                <span className="lg:text-right" hidden={!isOpenFlexible}>
-                  Period: <span className="font-normal text-sm">1 Jan 2024 - 31 Dec 2024</span>
-                </span>
-              </div>
-
-              <div
-                className={cn(
-                  isOpenFlexible ? "max-h-screen" : "max-h-0",
-                  "overflow-hidden transition-all duration-300",
-                )}
-              >
-                <div className="flex flex-col gap-y-0.5">
-                  <div className="grid grid-cols-2">
-                    <div className="bg-gray-50 rounded-l-sm pl-2">Allocation:</div>
-                    <div className="text-right">5,000.00</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="bg-gray-50 rounded-l-sm pl-2">Utilized:</div>
-                    <div className="text-right">5,000.00</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-x-2">
-                <div className="flex justify-between items-center font-semibold">
-                  <span>Balance: </span>
-                  <span>5,000.00</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Pending: </span>
-                  <span>1,000.00</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col lg:flex-row lg:items-center font-semibold lg:justify-between lg:pt-2">
-                <div
-                  className="flex items-center cursor-pointer gap-x-1 group"
-                  onClick={() => {
-                    setIsOpenMedical(!isOpenMedical)
-                  }}
-                >
-                  <span className="text-nowrap text-brand-primary group-hover:underline">Medical Spending Account</span>
-                  <ChevronUp
-                    className={cn(
-                      isOpenMedical && "transform rotate-180",
-                      "transition-transform duration-300 h-6 w-6 text-brand-primary shrink-0",
-                    )}
-                  />
-                </div>
-                <span className="lg:text-right" hidden={!isOpenMedical}>
-                  Period: <span className="font-normal text-sm">1 Jan 2024 - 31 Dec 2024</span>
-                </span>
-              </div>
-
-              <div
-                className={cn(
-                  isOpenMedical ? "max-h-screen" : "max-h-0",
-                  "overflow-hidden transition-all duration-300",
-                )}
-              >
-                <div className="flex flex-col gap-y-0.5">
-                  <div className="grid grid-cols-2">
-                    <div className="bg-gray-50 rounded-l-sm pl-2">Allocation:</div>
-                    <div className="text-right">5,000.00</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="bg-gray-50 rounded-l-sm pl-2">Utilized:</div>
-                    <div className="text-right">5,000.00</div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-col gap-x-2">
-                <div className="flex justify-between items-center font-semibold">
-                  <span>Balance: </span>
-                  <span>5,000.00</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Pending: </span>
-                  <span>1,000.00</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/*Points of consider*/}
-        <Card className={cn(currentStep !== 1 && "hidden", "h-full")}>
-          <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
-              <span className="font-bold text-base lg:text-lg">Points of consider</span>
-              <span>Please keep your original receipt for audit purposes.</span>
-            </div>
-          </CardContent>
-        </Card>
-
         {/*Claim information Page1*/}
-        <Card className={cn(currentStep !== 1 && "hidden", "h-full")}>
+        <Card className={currentStep === 1 ? "h-full" : "hidden"}>
           <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
-              <span className="font-bold text-base lg:text-lg">Claim information</span>
-              <div className="flex flex-col gap-y-6 font-semibold">
+            <div className="lg:mx-2 mb-3 flex flex-col text-sm lg:text-base gap-y-4">
+              <span className="font-bold text-base lg:text-lg">Claim Information</span>
+              <div className="flex flex-col gap-y-4 font-semibold">
                 <div className="flex flex-col gap-y-3">
                   <Label htmlFor="year">Plan Year</Label>
-                  <Input className="flex items-center md:w-2/12 lg:w-2/12" type="text" name="year" id="year" />
+                  <Select onValueChange={(e) => setYearSelected(e)}>
+                    <SelectTrigger className="md:w-1/3 lg:w-1/6">
+                      <SelectValue placeholder={yearSelected} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {yearList.map((value) => (
+                        <SelectItem key={value} value={value} className={cn(value === yearSelected && "bg-blue-50")}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex flex-col gap-y-3">
+                  <Label htmlFor="year">Policy Name</Label>
+                  <Select onValueChange={(e) => setPolicy(e)}>
+                    <SelectTrigger className="md:w-2/3 lg:w-2/3">
+                      <SelectValue placeholder={policy} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {policyName.map((value) => (
+                        <SelectItem key={value} value={value} className={cn(value === policy && "bg-blue-50")}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
                 <div className="flex flex-col gap-y-3">
                   <Label htmlFor="name">Claimant name</Label>
@@ -211,7 +117,7 @@ const Create: React.FC = () => {
                   <Label>Select the type of claim</Label>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                     <div className="bg-white relative p-20 rounded-xl border shadow-md cursor-pointer text-center hover:drop-shadow">
-                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Healthcare</p>
+                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Medical</p>
                       <div className="flex items-center justify-center absolute inset-0">
                         <div className="w-16 h-16 text-brand-primary">
                           <HealthcareIcon />
@@ -219,75 +125,14 @@ const Create: React.FC = () => {
                       </div>
                     </div>
                     <div className="bg-white relative p-20 rounded-xl border shadow-md cursor-pointer text-center hover:drop-shadow">
-                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">
-                        Family Oriented Benefits
-                      </p>
-                      <div className="flex items-center justify-center absolute inset-0">
-                        <div className="w-16 h-16 text-brand-primary">
-                          <FamilyIcon />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-white relative p-20 rounded-xl border shadow-md cursor-pointer text-center hover:drop-shadow">
-                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Wellness</p>
+                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Life</p>
                       <div className="flex items-center justify-center absolute inset-0">
                         <div className="w-16 h-16 text-brand-primary">
                           <WellnessIcon />
                         </div>
                       </div>
                     </div>
-                    <div className="bg-white relative p-20 rounded-xl border shadow-md cursor-pointer text-center hover:drop-shadow">
-                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Discretionary</p>
-                      <div className="flex items-center justify-center absolute inset-0">
-                        <div className="w-16 h-16 text-brand-primary">
-                          <DiscretionaryIcon />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-white relative p-20 rounded-xl border shadow-md cursor-pointer text-center hover:drop-shadow">
-                      <p className="absolute top-6 left-0 right-0 text-brand-primary text-nowrap">Inpatient</p>
-                      <div className="flex items-center justify-center absolute inset-0">
-                        <div className="w-16 h-16 text-brand-primary">
-                          <InpatientIcon />
-                        </div>
-                      </div>
-                    </div>
                   </div>
-                </div>
-                <div className="flex flex-col gap-y-3">
-                  <Label className="mb-4">Select a specific claim type</Label>
-                  <RadioGroup defaultValue="" className="flex flex-col gap-y-4">
-                    <div className="flex flex-col gap-y-4">
-                      <div className="flex items-center gap-x-2">
-                        <RadioGroupItem value="1" id="item1" />
-                        <Label htmlFor="item1">Outpatient</Label>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-y-4">
-                      <div className="flex items-center gap-x-2">
-                        <RadioGroupItem value="2" id="item2" />
-                        <Label htmlFor="item2">Dental</Label>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-y-4">
-                      <div className="flex items-center gap-x-2">
-                        <RadioGroupItem value="3" id="item3" />
-                        <Label htmlFor="item3">Alternative Medicine (Chiropractor, Homeopathy, etc.)</Label>
-                      </div>
-                      <div className="ml-6 flex gap-x-3">
-                        <Badge className="lg:text-sm">CPF Contributable</Badge>
-                        <Badge className="lg:text-sm">Taxable</Badge>
-                      </div>
-                    </div>
-                    <div className="flex flex-col gap-y-4">
-                      <div className="flex items-center gap-x-2">
-                        <RadioGroupItem value="4" id="item4" />
-                        <Label htmlFor="item4">
-                          Medical Expenses beyond Hospital & Surgical Plan Limit (Cash payment)
-                        </Label>
-                      </div>
-                    </div>
-                  </RadioGroup>
                 </div>
               </div>
             </div>
@@ -295,25 +140,48 @@ const Create: React.FC = () => {
         </Card>
 
         {/*File upload Page2*/}
-        <Card className={cn(currentStep === 2 ? "h-full" : "hidden")}>
+        <Card className={currentStep === 2 ? "h-full" : "hidden"}>
           <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
+            <div className="lg:mx-2 flex flex-col text-sm lg:text-base gap-y-4">
               <span className="font-bold text-base lg:text-lg">Claim receipt (file)</span>
               <div className="flex flex-col gap-y-2">
                 <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-2">Plan Year:</p>
+                  <p className="col-span-4 lg:col-span-2">Plan Year</p>
                   <p className="col-span-8 lg:col-span-10 font-semibold">2024</p>
                 </div>
                 <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-2">Claim Type:</p>
+                  <p className="col-span-4 lg:col-span-2">Policy Name</p>
                   <p className="col-span-8 lg:col-span-10 font-semibold">
-                    Outpatient Specialist (with/without referral letter)
+                    Policy NamePolicy NamePolicy NamePolicy Name
                   </p>
+                </div>
+                <div className="grid grid-cols-12">
+                  <p className="col-span-4 lg:col-span-2">Claimant name</p>
+                  <p className="col-span-8 lg:col-span-10 font-semibold">Rachel Svanhildr</p>
+                </div>
+                <div className="grid grid-cols-12">
+                  <p className="col-span-4 lg:col-span-2">Claim Type</p>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="col-span-8 lg:col-span-10 w-fit bg-white relative p-10 rounded-xl border shadow-md text-center">
+                          <div className="flex items-center justify-center absolute inset-0">
+                            <div className="w-10 h-10 text-brand-primary">
+                              <HealthcareIcon />
+                            </div>
+                          </div>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Medical</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
               <div className="flex flex-col gap-y-2">
                 <Label>
-                  <span className="text-red-500">*</span>Receipt Upload:
+                  <span className="text-red-500">*</span>Receipt Upload
                 </Label>
                 <FileUpload callbackFileEvent={handleFile} callbackFilePreviewEvent={handleFilePreview} />
                 <div className="flex items-center font-semibold justify-between lg:pt-2">
@@ -391,71 +259,31 @@ const Create: React.FC = () => {
           </CardContent>
         </Card>
 
-        {file && currentStep === 2 && (
-          <Card className={cn("h-full")}>
-            <CardContent className="px-0 lg:px-3">
-              <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
-                <span className="font-bold text-base lg:text-lg">Claim receipt (information)</span>
-                <div className="flex items-center gap-x-2">
-                  <Label htmlFor="claimant">Claimant:</Label>
-                  <p>Name of selected</p>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="provider">Provider:</Label>
-                    <Input id="provider" name="provider" />
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="receipt_no">
-                      <span className="text-red-500">*</span>Receipt No:
-                    </Label>
-                    <Input id="receipt_no" name="receipt_no" />
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="date">
-                      <span className="text-red-500">*</span>Receipt Date:
-                    </Label>
-                    <Input id="date" name="date" />
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="amount">
-                      <span className="text-red-500">*</span>Receipt Amount:
-                    </Label>
-                    <Input id="amount" name="amount" />
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="reason">
-                      <span className="text-red-500">*</span>Claim Reason:
-                    </Label>
-                    <Input id="reason" name="reason" />
-                  </div>
-                  <div className="flex flex-col gap-y-2">
-                    <Label htmlFor="remark">Remark:</Label>
-                    <Input id="remark" name="remark" />
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/*Support document upload Page3*/}
-        <Card className={cn(currentStep === 3 ? "h-full" : "hidden")}>
+        {/*Support document upload Page2*/}
+        <Card className={currentStep === 2 ? "h-full" : "hidden"}>
           <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
-              <span className="font-bold text-base lg:text-lg">Supporting documents (files)</span>
-              <div className="flex flex-col gap-y-2">
-                <div className="grid grid-cols-12">
-                  <p className="col-span-2">Plan Year:</p>
-                  <p className="col-span-10 font-semibold">2024</p>
-                </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-2">Claim Type:</p>
-                  <p className="col-span-10 font-semibold">Outpatient Specialist (with/without referral letter)</p>
-                </div>
+            <div className="lg:mx-2 flex flex-col text-sm lg:text-base gap-y-2">
+              <div
+                className="flex lg:items-center cursor-pointer gap-x-1 group"
+                onClick={() => {
+                  setIsOpenSupportDocument(!isOpenSupportDocument)
+                }}
+              >
+                <span className="font-bold text-base lg:text-lg">Referral documents (files)</span>
+                <ChevronUp
+                  className={cn(
+                    isOpenSupportDocument && "transform rotate-180",
+                    "transition-transform duration-300 h-6 w-6 shrink-0",
+                  )}
+                />
               </div>
-              <div className="flex flex-col gap-y-2">
-                <Label>Supporting documents Upload:</Label>
+              <div
+                className={cn(
+                  isOpenSupportDocument ? "max-h-full" : "max-h-0",
+                  "overflow-hidden transition-all duration-300 flex flex-col gap-y-2",
+                )}
+              >
+                <Label>Referral documents Upload</Label>
                 <FileMultipleUpload
                   callbackFileEvent={handleMultipleFile}
                   callbackFilePreviewEvent={handleMultipleFilePreview}
@@ -508,88 +336,149 @@ const Create: React.FC = () => {
           </CardContent>
         </Card>
 
+        {/*Claim detail Page3*/}
+        <Card className={currentStep === 3 ? "h-full" : "hidden"}>
+          <CardContent className="px-0 lg:px-3">
+            <div className="lg:mx-2 mb-3 flex flex-col text-sm lg:text-base gap-y-4">
+              <span className="font-bold text-base lg:text-lg">Claim Detail</span>
+              <div className="grid lg:grid-cols-12 gap-2 lg:gap-4 font-semibold">
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label>Receipt Date</Label>
+                  <CDatePicker />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label>Currency</Label>
+                  <Select>
+                    <SelectTrigger className="h-full">
+                      <SelectValue placeholder="Select Currency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {policyName.map((value) => (
+                        <SelectItem key={value} value={value} className={cn(value === policy && "bg-blue-50")}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="receipt_number">Receipt Number</Label>
+                  <Input className="flex items-center" type="text" name="receipt_number" id="receipt_number" />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="receipt_amount">Receipt Amount</Label>
+                  <Input className="flex items-center" type="number" name="receipt_amount" id="receipt_amount" />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="diagonosis">Diagnosis</Label>
+                  <Input className="flex items-center" type="text" name="diagonosis" id="diagonosis" />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="clinic">Clinic</Label>
+                  <Input className="flex items-center" type="text" name="clinic" id="clinic" />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label>Country of Treatment</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {policyName.map((value) => (
+                        <SelectItem key={value} value={value} className={cn(value === policy && "bg-blue-50")}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/*Review Page4*/}
         <Card className={cn(currentStep === steps.length ? "h-full" : "hidden")}>
           <CardContent className="px-0 lg:px-3">
-            <div className="mx-2 flex flex-col text-sm lg:text-base gap-y-6">
-              <span className="font-bold text-base lg:text-lg">Claim detail</span>
-              <div className="flex flex-col gap-y-3 lg:gap-y-6 text-sm lg:text-base">
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Plan Year:</p>
-                  <p className="col-span-7 8g:col-span-9">2024</p>
+            <div className="lg:mx-2 flex flex-col text-sm lg:text-base gap-y-4">
+              <span className="font-bold text-base lg:text-lg">Review Claim</span>
+              <div className="flex flex-col gap-y-4 text-sm lg:text-base">
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Plan Year</p>
+                  <p className="md:col-span-7 lg:col-span-9">2024</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Claim ID:</p>
-                  <p className="col-span-7 8g:col-span-9">newdemo3-001281</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Policy Name</p>
+                  <p className="md:col-span-7 lg:col-span-9">Policy 12100394</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Claim Item:</p>
-                  <p className="col-span-7 8g:col-span-9">Outpatient GP</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Claimant Name</p>
+                  <p className="md:col-span-7 lg:col-span-9">Rachel Svanhildr</p>
                 </div>
-                <div className="grid grid-cols-12 items-center">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Tax Status:</p>
-                  <div className="col-span-8 lg:col-span-9">
-                    <Badge variant="outline" className="text-sm">
-                      Non-Taxable
-                    </Badge>
-                  </div>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Claim Type</p>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="md:col-span-7 lg:col-span-9 w-fit bg-white relative p-10 rounded-xl border shadow-md text-center">
+                          <div className="flex items-center justify-center absolute inset-0">
+                            <div className="w-10 h-10 text-brand-primary">
+                              <HealthcareIcon />
+                            </div>
+                          </div>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Medical</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
-                <div className="grid grid-cols-12 items-center">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">CPF Contributable:</p>
-                  <div className="col-span-8 lg:col-span-9">
-                    <Badge variant="outline" className="text-sm">
-                      No
-                    </Badge>
-                  </div>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Receipt Date</p>
+                  <p className="md:col-span-7 lg:col-span-9">2 Jul 2024</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Claimant:</p>
-                  <p className="col-span-8 lg:col-span-9">Rachel Svanhildr</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Receipt Number</p>
+                  <p className="md:col-span-7 lg:col-span-9">10012301</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Provider:</p>
-                  <p className="col-span-8 lg:col-span-9">@Just Braces.Dental Centre</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Receipt Amount</p>
+                  <p className="md:col-span-7 lg:col-span-9">{money(1000)}</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Receipt No:</p>
-                  <p className="col-span-8 lg:col-span-9">1234</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Currency</p>
+                  <p className="md:col-span-7 lg:col-span-9">THB</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Receipt Date:</p>
-                  <p className="col-span-8 lg:col-span-9">2 Jul 2024</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Diagnosis</p>
+                  <p className="md:col-span-7 lg:col-span-9">test</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Receipt Amount:</p>
-                  <p className="col-span-8 lg:col-span-9">SGD 1,234.00</p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Clinic</p>
+                  <p className="md:col-span-7 lg:col-span-9">Thailand clinic</p>
                 </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Claim Reason:</p>
-                  <p className="col-span-8 lg:col-span-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, aperiam assumenda at aut consequatur
-                    cupiditate dolor dolore dolorum eligendi fugiat laborum magnam magni officia omnis quod repudiandae
-                    tenetur totam vero.
-                  </p>
-                </div>
-                <div className="grid grid-cols-12">
-                  <p className="col-span-4 lg:col-span-3 font-semibold">Remark:</p>
-                  <p className="col-span-8 lg:col-span-9">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium aut consequatur, dolores enim
-                    eum eveniet hic inventore ipsam labore laudantium magni, nam nisi numquam officiis possimus
-                    quibusdam quidem quisquam voluptatibus?
-                  </p>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Country of Treatment</p>
+                  <p className="md:col-span-7 lg:col-span-9">Thailand</p>
                 </div>
                 <div>
-                  <p className="font-semibold">Receipt:</p>
+                  <p className="font-semibold">Receipt</p>
                   <div className="flex flex-col items-center p-3">
                     {file && (
-                      <div
-                        className={cn(
-                          file.type.includes("pdf") && "absolute top-20",
-                          "flex flex-col items-center space-y-3",
-                        )}
-                      >
-                        {file.type.includes("image") && (
-                          <Image src={filePreview ?? ""} className="w-full rounded h-[13rem] z-10" alt="Preview" />
+                      <div className="flex flex-col items-center space-y-3">
+                        {(file.type.includes("image") && filePreview) && (
+                          <img src={filePreview} className="w-full h-[13rem] rounded z-10" alt="Preview" />
                         )}
                         {file.type.includes("pdf") && (
                           <div className="w-20 h-20 text-brand-primary z-10">
@@ -601,14 +490,14 @@ const Create: React.FC = () => {
                   </div>
                 </div>
                 <div>
-                  <p className="font-semibold">Supporting documents:</p>
+                  <p className="font-semibold">Referral documents</p>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center p-3 w-full">
                     {multipleFile.map((file: any, index: number) =>
-                      file.type.includes("image") ? (
-                        <Image
+                      file.type.includes("image") && multipleFilePreview[index] ? (
+                        <img
                           key={index.toString()}
                           src={multipleFilePreview[index]}
-                          className="w-full rounded h-[13rem]"
+                          className="w-full h-[13rem] rounded"
                           alt="Preview"
                         />
                       ) : (
@@ -629,7 +518,7 @@ const Create: React.FC = () => {
           </CardContent>
         </Card>
       </CardContent>
-      <CardFooter className="flex flex-col-reverse lg:flex-row gap-3 lg:justify-center">
+      <CardFooter className="mt-4 lg:mt-0 flex flex-col-reverse lg:flex-row gap-3 lg:justify-center">
         <Button
           variant="outline"
           className={cn(currentStep === 1 && "hidden", "w-full lg:w-fit border-brand-primary text-brand-primary")}

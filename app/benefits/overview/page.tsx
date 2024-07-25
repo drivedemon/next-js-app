@@ -2,7 +2,6 @@ import type React from "react"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/Forms/Select"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/Card"
 import Info from "@/components/Icons/Info"
-import {Skeleton} from "@/components/ui/Skeleton"
 
 const Overview: React.FC = () => {
   const yearList = ["2014", "2013", "2012", "2011"]
@@ -11,7 +10,7 @@ const Overview: React.FC = () => {
     <Card className="shadow-brand-primary h-full">
       <CardHeader>
         <div className="md:flex md:justify-between items-center">
-          <CardTitle>Benefits Overview</CardTitle>
+          <CardTitle>Benefits coverage Overview</CardTitle>
           <div className="pt-4 lg:p-0 flex items-center">
             <p className="text-base font-bold text-gray-500 pr-3">Plan Year</p>
             <Select>

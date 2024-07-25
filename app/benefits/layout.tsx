@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/Breadcrumb"
 import {Slash} from "lucide-react"
 import DashboardLayout from "@/components/Layouts/DashboardLayout"
-import {PageProvider, usePage} from "@/components/Layouts/DashboardContext"
+import {usePage} from "@/components/Layouts/DashboardContext"
 import DashboardContent from "@/components/Layouts/DashboardContent"
 import DashboardMenuTab from "@/components/Layouts/DashboardMenuTab"
-import {usePathname} from "next/navigation"
+import {useLayoutEffect} from "react"
 
 interface ParallelLayoutProps {
   children: ReactNode
@@ -23,11 +23,15 @@ interface ParallelLayoutProps {
 const BenefitsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   const {isPage, setPage} = usePage()
   const menuTab = [
-    {key: "overview", name: "Benefits Statement", event: () => setPage("overview")},
-    {key: "create", name: "Benefits Selection", event: () => setPage("create")},
-    {key: "document", name: "Documents", event: () => setPage("document")},
-    {key: "summary", name: "Total Rewards Statement", event: () => setPage("summary")},
+    {key: "benefit_overview", name: "Benefits Coverage", event: () => setPage("benefit_overview")},
+    {key: "benefit_document", name: "Policy Documents", event: () => setPage("benefit_document")},
+    // {key: "create", name: "Benefits Selection", event: () => setPage("create")},
+    // {key: "summary", name: "Total Rewards Statement", event: () => setPage("summary")},
   ]
+
+  useLayoutEffect(() => {
+    setPage(isPage?.includes("benefit") ? isPage : "benefit_overview")
+  }, [])
 
   return (
     <DashboardLayout>
@@ -52,15 +56,4 @@ const BenefitsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   )
 }
 
-const GetDefaultPage = (): string => {
-  const currentPath = usePathname()
-  return currentPath.split("/")[2] ?? "overview"
-}
-
-const BenefitsLayoutWrapper: React.FC<ParallelLayoutProps> = ({children}) => (
-  <PageProvider defaultPage={GetDefaultPage()}>
-    <BenefitsLayout>{children}</BenefitsLayout>
-  </PageProvider>
-)
-
-export default BenefitsLayoutWrapper
+export default BenefitsLayout

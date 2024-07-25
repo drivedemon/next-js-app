@@ -3,9 +3,6 @@
 import type React from "react"
 import dynamic from "next/dynamic"
 import {usePage} from "@/components/Layouts/DashboardContext"
-import {Card} from "@/components/ui/Card"
-import {Suspense} from "react"
-import DefaultClaimLoading from "@/app/claims/loading"
 import CreateLoading from "@/app/claims/create/loading"
 import TrackLoading from "@/app/claims/track/loading"
 import OverviewLoading from "@/app/claims/overview/loading"
@@ -33,20 +30,20 @@ const ClaimPage: React.FC = () => {
 
   let mainContent: React.JSX.Element
   switch (isPage) {
-    case "create":
+    case "claim_create":
       mainContent = <CreatePage />
       break
-    case "track":
+    case "claim_track":
       mainContent = <TrackPage />
       break
-    case "overview":
-      mainContent = <OverviewPage />
-      break
-    case "document":
+    case "claim_document":
       mainContent = <DocumentPage />
       break
+    // case "overview":
+    //   mainContent = <OverviewPage />
+    //   break
     default:
-      mainContent = <div>Select a page from the Left side Menu</div>
+      mainContent = <TrackPage />
   }
 
   return <>{mainContent}</>

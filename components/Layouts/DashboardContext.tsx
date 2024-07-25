@@ -1,8 +1,8 @@
 import React, {createContext, useContext, useState, type ReactNode} from "react"
 
 interface PageContextType {
-  isPage: string
-  setPage: (page: string) => void
+  isPage: string | null
+  setPage: (page: string | null) => void
 }
 
 const PageContext = createContext<PageContextType | undefined>(undefined)
@@ -15,7 +15,7 @@ const usePage = () => {
   return context
 }
 
-const PageProvider = ({children, defaultPage}: {children: ReactNode; defaultPage: string}) => {
+const PageProvider = ({children, defaultPage}: {children: ReactNode; defaultPage: string | null}) => {
   const [isPage, setPage] = useState(defaultPage)
 
   return <PageContext.Provider value={{isPage, setPage}}>{children}</PageContext.Provider>

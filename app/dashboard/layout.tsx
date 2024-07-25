@@ -9,6 +9,11 @@ import {
 } from "@/components/ui/Breadcrumb"
 import {Slash} from "lucide-react"
 import DashboardLayout from "@/components/Layouts/DashboardLayout"
+import type {Metadata} from "next"
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+}
 
 interface ParallelLayoutProps {
   children: ReactNode

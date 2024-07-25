@@ -158,13 +158,8 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center py-4 w-full">
         {files.map((file: any, index: number) =>
-          file.type.includes("image") ? (
-            <Image
-              key={index.toString()}
-              src={filesPreview[index]}
-              className="w-full rounded h-[13rem]"
-              alt="Preview"
-            />
+          file.type.includes("image") && filesPreview[index] ? (
+            <img key={index.toString()} src={filesPreview[index]} className="w-full h-[13rem] rounded" alt="Preview" />
           ) : (
             <div
               key={index.toString()}

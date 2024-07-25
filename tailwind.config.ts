@@ -1,8 +1,10 @@
 import type { Config } from "tailwindcss"
+import flowbite from "flowbite-react/tailwind"
 
 const config = {
   darkMode: ["class"],
   content: [
+    flowbite.content(),
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
@@ -228,6 +230,7 @@ const config = {
     },
   },
   plugins: [
+    flowbite.plugin(),
     require("tailwindcss-animate"),
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),

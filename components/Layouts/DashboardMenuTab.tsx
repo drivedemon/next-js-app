@@ -45,7 +45,7 @@ const DashboardMenuTab: React.FC<DashboardMenuTabProps> = ({menu, current}) => {
 
   return (
     <div id="menuSide" className="lg:col-span-3 lg:px-4 h-full flex flex-col lg:border-r border-gray-300">
-      <Card className="sticky shadow-brand-primary">
+      <Card className="lg:min-h-32 sticky shadow-brand-primary">
         <CardContent className="flex flex-col gap-y-6 text-base font-semibold">
           {menu.map((value, index) => (
             <div

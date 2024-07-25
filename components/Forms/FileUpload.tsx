@@ -106,10 +106,10 @@ const FileUpload: FC<FileUploadProps> = ({callbackFileEvent, callbackFilePreview
         onDragOver={handleDragOver}
       >
         <div className="flex flex-col items-center p-3">
-          {file && (
+          {file && filePreview && (
             <div className={cn(file.type.includes("pdf") && "absolute top-20", "flex flex-col items-center space-y-3")}>
-              {file.type.includes("image") && (
-                <Image src={filePreview ?? ""} className="w-full rounded h-[13rem] z-10" alt="Preview" />
+              {file.type.includes("image") && filePreview && (
+                <img src={filePreview} className="w-full h-[13rem] rounded z-10" alt="Preview" />
               )}
               {file.type.includes("pdf") && (
                 <div className="w-20 h-20 text-brand-primary z-10">

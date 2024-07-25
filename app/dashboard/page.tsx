@@ -1,14 +1,15 @@
-import type {Metadata} from "next"
+"use client"
+
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/Card"
-import {FileInput, ListTodo, Pointer, Umbrella, Wallet} from "lucide-react"
+import {Building2, CreditCard, FileInput, FileText, ListTodo, Umbrella} from "lucide-react"
 import {Button} from "@/components/Forms/Button"
 import type React from "react"
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-}
+import {usePage} from "@/components/Layouts/DashboardContext"
+import Link from "next/link"
 
 const Dashboard: React.FC = () => {
+  const {setPage} = usePage()
+
   return (
     <div className="gap-y-4 flex-col items-center grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:h-screen lg:px-0">
       <div className="lg:col-span-3 lg:px-4 h-full flex flex-col lg:border-r border-gray-300">
@@ -49,90 +50,98 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <Pointer className="text-brand-primary" />
-                <span className="text-lg font-semibold">Benefits Selection</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">Select your Group Insurance coverage</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
+          <Link href="/benefits" onClick={() => setPage("benefit_overview")}>
+            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+              <CardHeader className="px-0">
+                <CardTitle className="flex gap-x-2">
+                  <Umbrella className="text-brand-primary" />
+                  <span className="text-lg font-semibold">Benefits Coverage</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                <p className="text-sm">description</p>
+              </CardContent>
+              <CardFooter />
+            </Card>
+          </Link>
+        </div>
+
+        <div className="col-span-12 sm:col-span-6 lg:col-span-4 min-h-20">
+          <Link href="/benefits" onClick={() => setPage("benefit_document")}>
+            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+              <CardHeader className="px-0">
+                <CardTitle className="flex gap-x-2">
+                  <FileText className="text-brand-primary" />
+                  <span className="text-lg font-semibold">Policy Document</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                <p className="text-sm">description</p>
+              </CardContent>
+              <CardFooter />
+            </Card>
+          </Link>
         </div>
 
         <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <FileInput className="text-brand-primary" />
-                <span className="text-lg font-semibold">Submit claims</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">Submit your Insurance and Flex claim online</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
+          <Link href="/claims" onClick={() => setPage("claim_create")}>
+            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+              <CardHeader className="px-0">
+                <CardTitle className="flex gap-x-2">
+                  <FileInput className="text-brand-primary" />
+                  <span className="text-lg font-semibold">Submit claims</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                <p className="text-sm">description</p>
+              </CardContent>
+              <CardFooter />
+            </Card>
+          </Link>
         </div>
 
         <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <Umbrella className="text-brand-primary" />
-                <span className="text-lg font-semibold">Benefits Coverage</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">Check your Group Insurance coverage</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
+          <Link href="/claims" onClick={() => setPage("claim_track")}>
+            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+              <CardHeader className="px-0">
+                <CardTitle className="flex gap-x-2">
+                  <ListTodo className="text-brand-primary" />
+                  <span className="text-lg font-semibold">Track claims</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                <p className="text-sm">description</p>
+              </CardContent>
+              <CardFooter />
+            </Card>
+          </Link>
         </div>
 
         <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+          <Card className="shadow-brand-primary opacity-50 hover:drop-shadow-lg cursor-not-allowed h-full">
             <CardHeader className="px-0">
               <CardTitle className="flex gap-x-2">
-                <ListTodo className="text-brand-primary" />
-                <span className="text-lg font-semibold">Track claims</span>
+                <CreditCard className="text-brand-primary" />
+                <span className="text-lg font-semibold">eCard</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="px-0">
-              <p className="text-sm">Check you claim status</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <Wallet className="text-brand-primary" />
-                <span className="text-lg font-semibold">Statement of accounts</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">Check your account utilization</p>
+              <p className="text-sm">description</p>
             </CardContent>
             <CardFooter />
           </Card>
         </div>
 
         <div className="col-span-12 sm:col-span-6 lg:col-span-4 min-h-20">
-          <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
+          <Card className="shadow-brand-primary opacity-50 hover:drop-shadow-lg cursor-not-allowed h-full">
             <CardHeader className="px-0">
               <CardTitle className="flex gap-x-2">
-                <FileInput className="text-brand-primary" />
-                <span className="text-lg font-semibold">Documents</span>
+                <Building2 className="text-brand-primary" />
+                <span className="text-lg font-semibold">Clinics</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="px-0">
-              <p className="text-sm">User guide, Policy documents, Claims form</p>
+              <p className="text-sm">description</p>
             </CardContent>
             <CardFooter />
           </Card>

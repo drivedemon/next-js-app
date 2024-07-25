@@ -11,31 +11,29 @@ import {
 } from "@/components/ui/Breadcrumb"
 import {Slash} from "lucide-react"
 import DashboardLayout from "@/components/Layouts/DashboardLayout"
-import DashboardMenuTab from "@/components/Layouts/DashboardMenuTab"
+import {PageProvider, usePage} from "@/components/Layouts/DashboardContext"
 import DashboardContent from "@/components/Layouts/DashboardContent"
-import {usePage} from "@/components/Layouts/DashboardContext"
-import {useLayoutEffect} from "react"
+import DashboardMenuTab from "@/components/Layouts/DashboardMenuTab"
+import {usePathname} from "next/navigation"
 
 interface ParallelLayoutProps {
   children: ReactNode
 }
-const ClaimsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
-  const {isPage, setPage} = usePage()
-  const menuTab = [
-    {key: "claim_track", name: "Track Claims", event: () => setPage("claim_track")},
-    {key: "claim_create", name: "New Claims", event: () => setPage("claim_create")},
-    {key: "claim_document", name: "Policy Documents", event: () => setPage("claim_document")},
-    // {key: "overview", name: "Account Overview", event: () => setPage("overview")},
-  ]
 
-  useLayoutEffect(() => {
-    setPage(isPage?.includes("claim") ? isPage : "claim_track")
-  }, [])
+const BenefitsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
+  const {isPage, setPage} = usePage()
+
+  const menuTab = [
+    {key: "overview", name: "Benefits Coverage", event: () => setPage("overview")},
+    {key: "document", name: "Policy Documents", event: () => setPage("document")},
+    // {key: "create", name: "Benefits Selection", event: () => setPage("create")},
+    // {key: "summary", name: "Total Rewards Statement", event: () => setPage("summary")},
+  ]
 
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-y-4 mb-6 lg:mx-8">
-        <p className="font-bold text-4xl">Claims</p>
+        <p className="font-bold text-4xl">Benefits</p>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -45,7 +43,7 @@ const ClaimsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
               <Slash />
             </BreadcrumbSeparator>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/claims">Claims</BreadcrumbLink>
+              <BreadcrumbLink href="/benefits">Benefits</BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -55,4 +53,14 @@ const ClaimsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   )
 }
 
-export default ClaimsLayout
+const GetDefaultPage = (): string => {
+  const currentPath = usePathname()
+  return currentPath.split("/")[2] ?? "overview"
+}
+
+const BenefitsLayoutWrapper: React.FC<ParallelLayoutProps> = ({children}) => {
+  // LayoutWrapper is initial layout before mount page
+  return <BenefitsLayout>{children}</BenefitsLayout>
+}
+
+export default BenefitsLayoutWrapper

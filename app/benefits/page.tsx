@@ -8,10 +8,6 @@ import CreateLoading from "@/app/benefits/create/loading"
 import OverviewLoading from "@/app/benefits/overview/loading"
 import SummaryLoading from "@/app/benefits/summary/loading"
 
-const CreatePage = dynamic(() => import("./create/page"), {
-  ssr: false,
-  loading: () => <CreateLoading />,
-})
 const DocumentPage = dynamic(() => import("./document/page"), {
   ssr: false,
   loading: () => <DocumentLoading />,
@@ -19,6 +15,10 @@ const DocumentPage = dynamic(() => import("./document/page"), {
 const OverviewPage = dynamic(() => import("./overview/page"), {
   ssr: false,
   loading: () => <OverviewLoading />,
+})
+const CreatePage = dynamic(() => import("./create/page"), {
+  ssr: false,
+  loading: () => <CreateLoading />,
 })
 const SummaryPage = dynamic(() => import("./summary/page"), {
   ssr: false,
@@ -30,20 +30,20 @@ const BenefitPage: React.FC = () => {
 
   let mainContent: React.JSX.Element
   switch (isPage) {
-    case "create":
-      mainContent = <CreatePage />
-      break
-    case "document":
+    case "benefit_document":
       mainContent = <DocumentPage />
       break
-    case "overview":
+    case "benefit_overview":
       mainContent = <OverviewPage />
       break
-    case "summary":
-      mainContent = <SummaryPage />
-      break
+    // case "create":
+    //   mainContent = <CreatePage />
+    //   break
+    // case "summary":
+    //   mainContent = <SummaryPage />
+    //   break
     default:
-      mainContent = <div>Select a page from the Left side Menu</div>
+      mainContent = <OverviewPage />
   }
 
   return <>{mainContent}</>
