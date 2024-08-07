@@ -6,15 +6,19 @@ import {Button} from "@/components/Forms/Button"
 import type React from "react"
 import {usePage} from "@/components/Layouts/DashboardContext"
 import Link from "next/link"
+import {useSession} from "next-auth/react"
 
 const Dashboard: React.FC = () => {
   const {setPage} = usePage()
+  const {data: session, status, update} = useSession()
 
   return (
     <div className="gap-y-4 flex-col items-center grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:h-screen lg:px-0">
       <div className="lg:col-span-3 lg:px-4 h-full flex flex-col lg:border-r border-gray-300">
         <Card className="shadow-brand-primary">
           <CardHeader className="text-center border-b border-gray-500">
+            {JSON.stringify(session)}
+
             <CardTitle>Actions</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-y-2 justify-center items-center text-center">

@@ -1,3 +1,5 @@
+"use client"
+
 import type React from "react"
 import type {ReactNode} from "react"
 import {
@@ -9,17 +11,20 @@ import {
 } from "@/components/ui/Breadcrumb"
 import {Slash} from "lucide-react"
 import DashboardLayout from "@/components/Layouts/DashboardLayout"
-import type {Metadata} from "next"
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-}
+import {useLayoutEffect} from "react"
+import {usePage} from "@/components/Layouts/DashboardContext"
 
 interface ParallelLayoutProps {
   children: ReactNode
 }
 
 const DashboardPageLayout: React.FC<ParallelLayoutProps> = ({children}) => {
+  const {setPage} = usePage()
+
+  useLayoutEffect(() => {
+    setPage(null)
+  }, [])
+
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-y-4 mb-6 lg:mx-8">

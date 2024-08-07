@@ -20,6 +20,9 @@ import {
 } from "@/components/ui/DropdownMenu"
 import Logo from "@/components/Icons/Logo"
 import {cn} from "@/lib/utils"
+import axios from "axios"
+import {LOGOUT_URL} from "@/lib/apiEndPoints"
+import {signOut, useSession} from "next-auth/react"
 
 interface HeaderProps {
   user: User | null
@@ -27,9 +30,11 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({user}) => {
   const {toast} = useToast()
+  const {data: session, status, update} = useSession()
 
-  // mockup login
   const currentPath = usePathname()
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const isLogin = Routers.some((router) => currentPath.includes(router.path))
 
   const toggleMenu = () => {
@@ -37,8 +42,29 @@ const Header: FC<HeaderProps> = ({user}) => {
       setIsDropdownOpen(!isDropdownOpen)
     }, 200)
   }
-  const [isNavOpen, setIsNavOpen] = useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const logout = () => {
+    axios
+      .post(
+        LOGOUT_URL,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user?.token}`,
+            Accept: "application/json",
+          },
+        },
+      )
+      .then((res) => {
+        if (res?.status === 200) {
+          signOut({redirect: true, callbackUrl: "/"})
+          toast({title: "Logged out successfully!"})
+        }
+      })
+      .catch((err) => {
+        signOut({redirect: true, callbackUrl: "/"})
+      })
+  }
 
   useEffect(() => {
     if (isDropdownOpen) {
@@ -65,6 +91,7 @@ const Header: FC<HeaderProps> = ({user}) => {
               className="cursor-pointer text-sm"
               onClick={() => {
                 toast({
+                  variant: "success",
                   title: "Scheduled: Catch up",
                   description: "test",
                 })
@@ -84,7 +111,9 @@ const Header: FC<HeaderProps> = ({user}) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuLabel className="text-xs font-semibold text-gray-500">Rachel Svanhildr</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-xs font-semibold text-gray-500">
+                {session?.user?.first_name} {session?.user?.last_name}
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <Link href={"/profile"} onClick={() => setIsNavOpen(false)}>
@@ -95,7 +124,7 @@ const Header: FC<HeaderProps> = ({user}) => {
                 </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={logout}>
                 <ArrowRightStartOnRectangleIcon className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>

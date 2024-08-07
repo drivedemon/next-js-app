@@ -477,7 +477,7 @@ const Create: React.FC = () => {
                   <div className="flex flex-col items-center p-3">
                     {file && (
                       <div className="flex flex-col items-center space-y-3">
-                        {(file.type.includes("image") && filePreview) && (
+                        {file.type.includes("image") && filePreview && (
                           <img src={filePreview} className="w-full h-[13rem] rounded z-10" alt="Preview" />
                         )}
                         {file.type.includes("pdf") && (

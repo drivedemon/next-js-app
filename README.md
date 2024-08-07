@@ -7,7 +7,8 @@
 - Next js 14
 - Tailwind 3
 - Axios
-- Lucide Icon
+- Next auth
+- Lucide Icon / Hero icon
 
 ## Requirement
 
@@ -82,6 +83,10 @@ First, install project
 ```
 npm ci
 ```
+
+Copy `.env.example` to `.env` then fill key and the url
+
+generate secret link: https://generate-secret.vercel.app/32
 
 then run the development server:
 ```

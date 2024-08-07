@@ -1,5 +1,3 @@
-"use client"
-
 import "./globals.css"
 import {Inter as FontSans} from "next/font/google"
 import Footer from "@/components/Footer/Footer"
@@ -7,7 +5,9 @@ import {Toaster} from "@/components/Toast/Toaster"
 import {cn} from "@/lib/utils"
 import type React from "react"
 import type {ReactNode} from "react"
-import {PageProvider} from "@/components/Layouts/DashboardContext"
+import Provider from "@/providers/ClientProvider"
+import {getServerSession} from "next-auth/next"
+import {authOptions, type AuthUserSession} from "@/app/api/auth/[...nextauth]/authOptions"
 
 const fontSans = FontSans({subsets: ["latin"], variable: "--font-sans"})
 
@@ -15,7 +15,9 @@ interface ParallelLayoutProps {
   children: ReactNode
 }
 
-const RootLayout = ({children}: Readonly<ParallelLayoutProps>) => {
+const RootLayout = async ({children}: Readonly<ParallelLayoutProps>) => {
+  const session: AuthUserSession | null = await getServerSession(authOptions)
+
   return (
     <html lang="en">
       <body
@@ -26,17 +28,13 @@ const RootLayout = ({children}: Readonly<ParallelLayoutProps>) => {
         }}
       >
         <Toaster />
-        <div className="bg-gray-100">{children}</div>
+        <Provider session={session}>
+          <div className="bg-gray-100">{children}</div>
+        </Provider>
         <Footer />
       </body>
     </html>
   )
 }
 
-const RootLayoutWrapper: React.FC<ParallelLayoutProps> = ({children}) => (
-  <PageProvider defaultPage={null}>
-    <RootLayout>{children}</RootLayout>
-  </PageProvider>
-)
-
-export default RootLayoutWrapper
+export default RootLayout
