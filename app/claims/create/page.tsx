@@ -26,7 +26,6 @@ const Create: React.FC = () => {
   const policyName = ["Policy 12100394", "Policy 12100395", "Policy 12100396", "Policy 12100397"]
   const [policy, setPolicy] = useState<string>(policyName[0])
   const [yearSelected, setYearSelected] = useState<string>(yearList[0])
-  const [datePicker, setDatePicker] = useState<string>("")
 
   const [isOpenGuideline, setIsOpenGuideline] = useState<boolean>(false)
   const [isOpenSupportDocument, setIsOpenSupportDocument] = useState<boolean>(false)
@@ -343,8 +342,16 @@ const Create: React.FC = () => {
               <span className="font-bold text-base lg:text-lg">Claim Detail</span>
               <div className="grid lg:grid-cols-12 gap-2 lg:gap-4 font-semibold">
                 <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="receipt_number">Receipt Number</Label>
+                  <Input className="flex items-center" type="text" name="receipt_number" id="receipt_number" />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
                   <Label>Receipt Date</Label>
                   <CDatePicker />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="receipt_amount">Receipt Amount</Label>
+                  <Input className="flex items-center" type="number" name="receipt_amount" id="receipt_amount" />
                 </div>
                 <div className="col-span-6 flex flex-col gap-y-3">
                   <Label>Currency</Label>
@@ -360,14 +367,6 @@ const Create: React.FC = () => {
                       ))}
                     </SelectContent>
                   </Select>
-                </div>
-                <div className="col-span-6 flex flex-col gap-y-3">
-                  <Label htmlFor="receipt_number">Receipt Number</Label>
-                  <Input className="flex items-center" type="text" name="receipt_number" id="receipt_number" />
-                </div>
-                <div className="col-span-6 flex flex-col gap-y-3">
-                  <Label htmlFor="receipt_amount">Receipt Amount</Label>
-                  <Input className="flex items-center" type="number" name="receipt_amount" id="receipt_amount" />
                 </div>
                 <div className="col-span-6 flex flex-col gap-y-3">
                   <Label htmlFor="diagonosis">Diagnosis</Label>
@@ -391,6 +390,43 @@ const Create: React.FC = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className={currentStep === 3 ? "h-full" : "hidden"}>
+          <CardContent className="px-0 lg:px-3">
+            <div className="lg:mx-2 mb-3 flex flex-col text-sm lg:text-base gap-y-4">
+              <span className="font-bold text-base lg:text-lg">Bank Detail</span>
+              <div className="grid lg:grid-cols-12 gap-2 lg:gap-4 font-semibold">
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label>Bank Name</Label>
+                  <Select>
+                    <SelectTrigger className="h-full">
+                      <SelectValue placeholder="Select Bank name" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {policyName.map((value) => (
+                        <SelectItem key={value} value={value} className={cn(value === policy && "bg-blue-50")}>
+                          {value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="bank_account_number">Bank Account Number</Label>
+                  <Input
+                    className="flex items-center"
+                    type="text"
+                    name="bank_account_number"
+                    id="bank_account_number"
+                  />
+                </div>
+                <div className="col-span-6 flex flex-col gap-y-3">
+                  <Label htmlFor="bank_holder_name">Bank Holder Name</Label>
+                  <Input className="flex items-center" type="text" name="bank_holder_name" id="bank_holder_name" />
                 </div>
               </div>
             </div>
@@ -471,6 +507,21 @@ const Create: React.FC = () => {
                 <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
                   <p className="md:col-span-4 lg:col-span-3 font-semibold">Country of Treatment</p>
                   <p className="md:col-span-7 lg:col-span-9">Thailand</p>
+                </div>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Bank Name</p>
+                  <p className="md:col-span-7 lg:col-span-9">Rachel Svanhildr</p>
+                </div>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Bank Account Number</p>
+                  <p className="md:col-span-7 lg:col-span-9">1234567890</p>
+                </div>
+
+                <div className="grid gap-y-0.5 md:grid-cols-12 lg:grid-cols-12">
+                  <p className="md:col-span-4 lg:col-span-3 font-semibold">Bank Account Name</p>
+                  <p className="md:col-span-7 lg:col-span-9">Rachel Svanhildr</p>
                 </div>
                 <div>
                   <p className="font-semibold">Receipt</p>

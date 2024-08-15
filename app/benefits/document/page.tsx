@@ -13,17 +13,17 @@ const Document: React.FC = () => {
         <ul className="list-disc list-inside my-3 space-y-1">
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              Need Help on Pacific Prime CXA Portal
+              Need Help on Pacific Prime PCM Portal
             </Link>
           </li>
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              PPCXA Portal User Guide
+              PCM Portal User Guide
             </Link>
           </li>
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              PPCXA Mobile App User Guide
+              PCM Mobile App User Guide
             </Link>
           </li>
         </ul>

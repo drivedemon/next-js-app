@@ -45,7 +45,7 @@ const Login: FC<LoginProps> = () => {
           })
           toast({
             variant: "success",
-            title: "Loggedin successfully!",
+            title: "Logged in successfully!",
           })
         } else {
           toast({

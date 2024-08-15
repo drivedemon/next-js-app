@@ -13,7 +13,7 @@ const Dashboard: React.FC = () => {
   const {data: session, status, update} = useSession()
 
   return (
-    <div className="gap-y-4 flex-col items-center grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:h-screen lg:px-0">
+    <div className="gap-y-4 flex-col items-center grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:px-0">
       <div className="lg:col-span-3 lg:px-4 h-full flex flex-col lg:border-r border-gray-300">
         <Card className="shadow-brand-primary">
           <CardHeader className="text-center border-b border-gray-500">

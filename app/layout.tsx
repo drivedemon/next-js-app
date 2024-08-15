@@ -21,7 +21,7 @@ const RootLayout = async ({children}: Readonly<ParallelLayoutProps>) => {
   return (
     <html lang="en">
       <body
-        className={cn(fontSans.className, "text-gray-950 relative")}
+        className={cn(fontSans.className, "text-gray-950 bg-gray-100 flex flex-col")}
         style={{
           minHeight: "calc(var(--vh, 1vh) * 100)",
           paddingRight: "calc(0 - var(--removed-body-scroll-bar-size)) !important",
@@ -29,7 +29,7 @@ const RootLayout = async ({children}: Readonly<ParallelLayoutProps>) => {
       >
         <Toaster />
         <Provider session={session}>
-          <div className="bg-gray-100">{children}</div>
+          <div className="flex-grow">{children}</div>
         </Provider>
         <Footer />
       </body>

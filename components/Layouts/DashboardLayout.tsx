@@ -10,7 +10,7 @@ const DashboardLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   return (
     <>
       <Header user={null} />
-      <div className="container px-4 lg:px-0 py-4 min-h-screen">{children}</div>
+      <div className="container px-4 lg:px-0 py-4">{children}</div>
     </>
   )
 }
