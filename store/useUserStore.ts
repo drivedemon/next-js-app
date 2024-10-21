@@ -1,9 +1,9 @@
-import {User} from "@/types/User"
+import {TUser} from "@/types/User"
 import {create} from "zustand"
 
 type UserStore = {
-  user: User
-  handleUser: (user: User) => void
+  user: TUser
+  handleUser: (user: TUser) => void
 }
 
 export const useUserStore = create<UserStore>()((set) => ({

@@ -4,25 +4,29 @@ import type React from "react"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/Card"
 import {cn, moneyDecimal} from "@/lib/utils"
 import {useState} from "react"
-import ClaimSubMenu, {claimTypeDisplay, claimTypePage, type SubMenuClaimType} from "@/components/Claims/SubMenu"
+import ClaimSubMenu, {claimTypeDisplay, claimTypePage, type ISubMenuClaimType} from "@/components/Claims/SubMenu"
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/Forms/Table"
 import {Badge} from "@/components/ui/Badge"
 import {Eye, Pencil, Trash2} from "lucide-react"
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/Forms/Select"
+import Link from "next/link"
+import {usePage} from "@/components/Layouts/DashboardContext"
 
 const Track: React.FC = () => {
-  const [claimType, setClaimType] = useState<SubMenuClaimType>({key: claimTypePage[0], value: claimTypeDisplay[0]})
+  const [claimType, setClaimType] = useState<ISubMenuClaimType>({key: claimTypePage[0], value: claimTypeDisplay[0]})
+  const {isPage} = usePage()
+  const isTrackPage = isPage === "claim_track"
 
   return (
     <Card className="shadow-brand-primary h-full">
-      <ClaimSubMenu claimTypeState={setClaimType} />
+      {/*<ClaimSubMenu claimTypeState={setClaimType} />*/}
       <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          {claimType.value}
-          <div className="flex items-center gap-x-4">
-            <div className={claimType.key === claimTypePage[0] ? "block" : "hidden"}>
+        <CardTitle className="flex flex-col lg:flex-row gap-y-4 justify-between items-center">
+          <p className="shrink">{isTrackPage ? "Track Claims" : "Completed Claims"}</p>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-end w-full lg:w-auto gap-4">
+            <div className={isTrackPage ? "block" : "hidden"}>
               <Select>
-                <SelectTrigger>
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Status" defaultValue="Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -30,15 +34,17 @@ const Track: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Policy Year" defaultValue="Policy Year" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="2023">2023</SelectItem>
-                <SelectItem value="2024">2024</SelectItem>
-              </SelectContent>
-            </Select>
+            <div>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Policy Year" defaultValue="Policy Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2023">2023</SelectItem>
+                  <SelectItem value="2024">2024</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardTitle>
       </CardHeader>
@@ -59,8 +65,46 @@ const Track: React.FC = () => {
           <TableBody>
             <TableRow>
               <TableCell>
-                <Badge variant={claimType.key === claimTypePage[0] ? "default" : "success"}>
-                  {claimType.key === claimTypePage[0] ? "Submitted" : "Completed"}
+                <Badge variant={isTrackPage ? "default" : "success"}>{isTrackPage ? "Submitted" : "Completed"}</Badge>
+              </TableCell>
+              <TableCell>Drive test</TableCell>
+              <TableCell>Medical</TableCell>
+              <TableCell>01 Jan 2024</TableCell>
+              <TableCell>{moneyDecimal(10000)}</TableCell>
+              <TableCell>01 Jan 2024</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>
+                <div className="flex items-center justify-center gap-x-2 px-2">
+                  <Pencil className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
+                  <Link href={`claims/track/${1}`}>
+                    <Eye className="w-5 h-5 text-brand-primary" />
+                  </Link>
+                  <Trash2 className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Badge variant={isTrackPage ? "outline" : "success"}>{isTrackPage ? "Cancel" : "Completed"}</Badge>
+              </TableCell>
+              <TableCell>Drive test</TableCell>
+              <TableCell>Medical</TableCell>
+              <TableCell>01 Jan 2024</TableCell>
+              <TableCell>{moneyDecimal(10000)}</TableCell>
+              <TableCell>01 Jan 2024</TableCell>
+              <TableCell>-</TableCell>
+              <TableCell>
+                <div className="flex items-center justify-center gap-x-2 px-2">
+                  <Pencil className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
+                  <Eye className="w-5 h-5 text-brand-primary" />
+                  <Trash2 className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
+                </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <Badge variant={isTrackPage ? "danger" : "success"} className="text-center">
+                  {isTrackPage ? "Missing Information" : "Completed"}
                 </Badge>
               </TableCell>
               <TableCell>Drive test</TableCell>
@@ -75,69 +119,17 @@ const Track: React.FC = () => {
                 </div>
               </TableCell>
               <TableCell>
-                <div className="flex items-center justify-center gap-x-3 px-2">
-                  <Pencil
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
+                <div className="flex items-center justify-center gap-x-2 px-2">
+                  <Pencil className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
                   <Eye className="w-5 h-5 text-brand-primary" />
-                  <Trash2
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
+                  <Trash2 className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
                 </div>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
-                <Badge variant={claimType.key === claimTypePage[0] ? "outline" : "success"}>
-                  {claimType.key === claimTypePage[0] ? "Draft" : "Completed"}
-                </Badge>
-              </TableCell>
-              <TableCell>Drive test</TableCell>
-              <TableCell>Medical</TableCell>
-              <TableCell>01 Jan 2024</TableCell>
-              <TableCell>{moneyDecimal(10000)}</TableCell>
-              <TableCell>01 Jan 2024</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>
-                <div className="flex items-center justify-center gap-x-3 px-2">
-                  <Pencil
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
-                  <Eye className="w-5 h-5 text-brand-primary" />
-                  <Trash2
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Badge variant={claimType.key === claimTypePage[0] ? "danger" : "success"} className="text-center">
-                  {claimType.key === claimTypePage[0] ? "Missing Information" : "Completed"}
-                </Badge>
-              </TableCell>
-              <TableCell>Drive test</TableCell>
-              <TableCell>Medical</TableCell>
-              <TableCell>01 Jan 2024</TableCell>
-              <TableCell>{moneyDecimal(10000)}</TableCell>
-              <TableCell>01 Jan 2024</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>
-                <div className="flex items-center justify-center gap-x-3 px-2">
-                  <Pencil
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
-                  <Eye className="w-5 h-5 text-brand-primary" />
-                  <Trash2
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <Badge variant={claimType.key === claimTypePage[0] ? "secondary" : "success"} className="text-center">
-                  {claimType.key === claimTypePage[0] ? "In Progress" : "Completed"}
+                <Badge variant={isTrackPage ? "secondary" : "success"} className="text-center">
+                  {isTrackPage ? "In Progress" : "Completed"}
                 </Badge>
               </TableCell>
               <TableCell>Drive test</TableCell>
@@ -147,14 +139,10 @@ const Track: React.FC = () => {
               <TableCell>01 Jan 2024</TableCell>
               <TableCell>-</TableCell>
               <TableCell>
-                <div className="flex items-center justify-center gap-x-3 px-2">
-                  <Pencil
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
+                <div className="flex items-center justify-center gap-x-2 px-2">
+                  <Pencil className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
                   <Eye className="w-5 h-5 text-brand-primary" />
-                  <Trash2
-                    className={cn(claimType.key === claimTypePage[1] && "hidden", "w-5 h-5 text-brand-primary")}
-                  />
+                  <Trash2 className={cn(!isTrackPage && "hidden", "w-5 h-5 text-brand-primary")} />
                 </div>
               </TableCell>
             </TableRow>

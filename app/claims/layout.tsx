@@ -19,10 +19,19 @@ import {useLayoutEffect} from "react"
 interface ParallelLayoutProps {
   children: ReactNode
 }
+
 const ClaimsLayout: React.FC<ParallelLayoutProps> = ({children}) => {
   const {isPage, setPage} = usePage()
   const menuTab = [
-    {key: "claim_track", name: "Track Claims", event: () => setPage("claim_track")},
+    {
+      key: "claim_track",
+      name: "Track Claims",
+      children: [
+        {key: "claim_track", name: "Track Claims", event: () => setPage("claim_track")},
+        {key: "claim_completed", name: "Completed Claims", event: () => setPage("claim_completed")},
+      ],
+      event: () => setPage("claim_track"),
+    },
     {key: "claim_create", name: "New Claims", event: () => setPage("claim_create")},
     {key: "claim_document", name: "Policy Documents", event: () => setPage("claim_document")},
     // {key: "overview", name: "Account Overview", event: () => setPage("overview")},

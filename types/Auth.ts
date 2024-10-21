@@ -1,4 +1,4 @@
-export type AuthLoginType = {
+export type TAuthLoginType = {
   username?: string
   password?: string
 }

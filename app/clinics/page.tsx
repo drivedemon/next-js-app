@@ -1,34 +1,29 @@
-import type React from "react"
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/Card"
+import type React from "react"
 import Link from "next/link"
 
-const Overview: React.FC = () => {
+const Clinic: React.FC = () => {
   return (
     <Card className="shadow-brand-primary h-full">
       <CardHeader>
-        <CardTitle>Benefit Coverage Documents</CardTitle>
+        <CardTitle>Clinic Documents</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-lg lg:text-xl font-semibold">FAQ and other Information</p>
         <ul className="list-disc list-inside my-3 space-y-1">
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              Health Coverage
+              HK Clinics
             </Link>
           </li>
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              Life Coverage
+              TH Clinics
             </Link>
           </li>
           <li>
             <Link href={""} className="font-medium text-brand-primary hover:underline">
-              (Group) Health Coverage
-            </Link>
-          </li>
-          <li>
-            <Link href={""} className="font-medium text-brand-primary hover:underline">
-              (Group) Life Coverage
+              International Clinics
             </Link>
           </li>
         </ul>
@@ -37,4 +32,4 @@ const Overview: React.FC = () => {
   )
 }
 
-export default Overview
+export default Clinic

@@ -1,4 +1,4 @@
-export type HeaderNav = {
+export type THeaderNav = {
   id: number
   value: string
   href: string

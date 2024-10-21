@@ -7,7 +7,7 @@ import type React from "react"
 import type {ReactNode} from "react"
 import Provider from "@/providers/ClientProvider"
 import {getServerSession} from "next-auth/next"
-import {authOptions, type AuthUserSession} from "@/app/api/auth/[...nextauth]/authOptions"
+import {authOptions, type IAuthUserSession} from "@/app/api/auth/[...nextauth]/authOptions"
 
 const fontSans = FontSans({subsets: ["latin"], variable: "--font-sans"})
 
@@ -16,7 +16,7 @@ interface ParallelLayoutProps {
 }
 
 const RootLayout = async ({children}: Readonly<ParallelLayoutProps>) => {
-  const session: AuthUserSession | null = await getServerSession(authOptions)
+  const session: IAuthUserSession | null = await getServerSession(authOptions)
 
   return (
     <html lang="en">
@@ -29,7 +29,7 @@ const RootLayout = async ({children}: Readonly<ParallelLayoutProps>) => {
       >
         <Toaster />
         <Provider session={session}>
-          <div className="flex-grow">{children}</div>
+          <div className="flex-grow flex flex-col">{children}</div>
         </Provider>
         <Footer />
       </body>

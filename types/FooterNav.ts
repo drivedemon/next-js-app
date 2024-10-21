@@ -1,7 +1,7 @@
-import type {HeaderNav} from "./HeaderNav"
+import type {THeaderNav} from "./HeaderNav"
 
-export type FooterNav = {
+export type TFooterNav = {
   id: number
   category: string
-  navs: HeaderNav[]
+  navs: THeaderNav[]
 }

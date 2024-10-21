@@ -7,10 +7,12 @@
     "build": "next build",
     "start": "next start",
     "clear-cache": "rm -rf node_modules/.cache",
-    "lint": "npx @biomejs/biome lint ./app ./lib ./types ./components",
-    "lint-fix": "npx @biomejs/biome lint ./app ./lib ./types ./components --write --unsafe",
-    "format": "npx @biomejs/biome format ./app ./lib ./types ./components",
-    "format-fix": "npx @biomejs/biome format ./app ./lib ./types ./components --write"
+    "lint": "npx @biomejs/biome lint ./app ./lib ./types ./components ./providers",
+    "lint-fix": "npx @biomejs/biome lint ./app ./lib ./types ./components ./providers --write --unsafe",
+    "format": "npx @biomejs/biome format ./app ./lib ./types ./components ./providers",
+    "format-fix": "npx @biomejs/biome format ./app ./lib ./types ./components ./providers --write",
+    "copy": "mv ./.next/static ./.next/standalone/; cp -r ./public ./.next/standalone/",
+    "cleanup": "rm -r node_modules"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.3",

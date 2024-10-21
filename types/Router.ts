@@ -1,9 +1,9 @@
-type Routing = {
+type TRouting = {
   path: string
   name: string
 }
 
-export const Routers: Routing[] = [
+export const CRouters: TRouting[] = [
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -15,6 +15,14 @@ export const Routers: Routing[] = [
   {
     path: "/claims",
     name: "Claims",
+  },
+  {
+    path: "/e-card",
+    name: "eCard",
+  },
+  {
+    path: "/clinics",
+    name: "Clinics",
   },
   {
     path: "/profile",

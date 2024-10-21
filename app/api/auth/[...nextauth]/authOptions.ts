@@ -3,12 +3,12 @@ import axios from "axios"
 import CredentialsProvider from "next-auth/providers/credentials"
 import type {AuthOptions, ISODateString} from "next-auth"
 
-export interface AuthUserSession {
-  user: AuthUser
+export interface IAuthUserSession {
+  user: IAuthUser
   expires: ISODateString
 }
 
-export interface AuthUser {
+export interface IAuthUser {
   uuid?: string | null
   login_buffer_day?: number | null
   first_name?: string | null
@@ -43,7 +43,7 @@ export const authOptions: AuthOptions = {
 
     async session({session, token}: any) {
       if (token) {
-        session.user = token.user as AuthUser
+        session.user = token.user as IAuthUser
       }
       return session
     },

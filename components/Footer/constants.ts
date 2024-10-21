@@ -1,6 +1,6 @@
-import type {FooterNav} from "@/types/FooterNav"
+import type {TFooterNav} from "@/types/FooterNav"
 
-export const FooterNavs: FooterNav[] = [
+export const CFooterNavs: TFooterNav[] = [
   {
     id: 1,
     category: "Contact Us",

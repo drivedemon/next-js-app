@@ -1,11 +1,11 @@
 import React, {createContext, useContext, useState, type ReactNode} from "react"
 
-interface PageContextType {
+interface IPageContextType {
   isPage: string | null
   setPage: (page: string | null) => void
 }
 
-const PageContext = createContext<PageContextType | undefined>(undefined)
+const PageContext = createContext<IPageContextType | undefined>(undefined)
 
 const usePage = () => {
   const context = useContext(PageContext)

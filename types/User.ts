@@ -1,4 +1,4 @@
-export type constUser = {
+export type User = {
   uuid?: string | null
   login_buffer_day?: number | null
   first_name?: string | null
@@ -16,4 +16,4 @@ export type constUser = {
   updated_by?: string | null
 }
 
-export type User = constUser | null
+export type TUser = User | null

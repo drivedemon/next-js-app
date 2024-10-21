@@ -9,13 +9,13 @@ import {cn, moneyDecimal} from "@/lib/utils"
 import {Progress} from "@/components/ui/Progress"
 import {ChevronUp, CircleCheck, CircleHelp, FileText} from "lucide-react"
 import {Badge} from "@/components/ui/Badge"
-import {type BenefitSelection, BenefitSelections, type Option, type Plan} from "@/types/Benefit"
+import {CBenefitSelections} from "@/types/Benefit"
 import {Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow} from "@/components/Forms/Table"
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/Tooltip"
 import {Checkbox} from "@/components/Forms/Checkbox"
 import {Label} from "@/components/Forms/Label"
 
-type PlanFormType = {
+type TPlanFormType = {
   benefitId: number
   planValue: number | null
   optionValue: number | null
@@ -23,20 +23,20 @@ type PlanFormType = {
   childBenefit: number | null
 }
 
-type FormType = {
+type TFormType = {
   available: number
   used: number
-  plans: PlanFormType[]
+  plans: TPlanFormType[]
 }
 
-type BenefitToggleType = {
+type TBenefitToggleType = {
   id: number
   isToggle: boolean
   isDetailToggle: boolean
 }
 
 type ToggleType = {
-  benefits: BenefitToggleType[]
+  benefits: TBenefitToggleType[]
 }
 
 const Create: React.FC = () => {
@@ -45,21 +45,21 @@ const Create: React.FC = () => {
   const [benefitToggles, setBenefitToggles] = useState<ToggleType>({
     benefits: [],
   })
-  const [formData, setFormData] = useState<FormType>({
+  const [formData, setFormData] = useState<TFormType>({
     available: 5000,
     used: 0,
-    plans: [] as PlanFormType[],
+    plans: [] as TPlanFormType[],
   })
   const steps = ["Convert Leaves", "Risk Benefit", "Medical Benefit", "Additional Benefit", "Review"]
 
-  const getCurrentPlan = (benefitId: number | null): PlanFormType | null => {
+  const getCurrentPlan = (benefitId: number | null): TPlanFormType | null => {
     const currentPlan = formData.plans.find((plan) => plan.benefitId === benefitId)
 
     return currentPlan ? currentPlan : null
   }
 
   const getBenefit = (benefitId: number) => {
-    return BenefitSelections.find((benefit) => benefit.id === benefitId)
+    return CBenefitSelections.find((benefit) => benefit.id === benefitId)
   }
 
   const getPlan = (benefitId: number, planId: number) => {
@@ -70,14 +70,14 @@ const Create: React.FC = () => {
     return getPlan(benefitId, planId)?.options.find((option) => option.id === optionId)
   }
 
-  const getCurrentToggle = (benefitId: number): BenefitToggleType | null => {
+  const getCurrentToggle = (benefitId: number): TBenefitToggleType | null => {
     const currentBenefit = benefitToggles.benefits.find((benefit) => benefit.id === benefitId)
 
     return currentBenefit ? currentBenefit : null
   }
 
   useEffect(() => {
-    const initialPlans = BenefitSelections.map((benefit) => {
+    const initialPlans = CBenefitSelections.map((benefit) => {
       const defaultPlan = benefit.plans.find((plan) => plan.default)
       return {
         benefitId: benefit.id,
@@ -88,7 +88,7 @@ const Create: React.FC = () => {
       }
     })
 
-    const initialToggleBenefitSelections = BenefitSelections.map((benefit) => {
+    const initialToggleCBenefitSelections = CBenefitSelections.map((benefit) => {
       return {
         id: benefit.id,
         isToggle: true,
@@ -103,7 +103,7 @@ const Create: React.FC = () => {
 
     setBenefitToggles((prevState) => ({
       ...prevState,
-      benefits: initialToggleBenefitSelections,
+      benefits: initialToggleCBenefitSelections,
     }))
   }, [])
 
@@ -114,7 +114,7 @@ const Create: React.FC = () => {
         plans: prevState.plans.map((plan) => {
           if (plan.benefitId === benefitId) {
             if (plan.optionValue !== null) {
-              const benefitSelection = BenefitSelections.find((benefit) => benefit.id === benefitId)
+              const benefitSelection = CBenefitSelections.find((benefit) => benefit.id === benefitId)
               if (!benefitSelection) {
                 return plan
               }
@@ -145,8 +145,8 @@ const Create: React.FC = () => {
           }
 
           if (plan.parentBenefit !== null) {
-            const benefitSelection = BenefitSelections.find((benefit) => benefit.id === benefitId)
-            const currentSelection = BenefitSelections.find((benefit) => benefit.id === plan.benefitId)
+            const benefitSelection = CBenefitSelections.find((benefit) => benefit.id === benefitId)
+            const currentSelection = CBenefitSelections.find((benefit) => benefit.id === plan.benefitId)
 
             if (!benefitSelection || !currentSelection) {
               return plan
@@ -209,7 +209,7 @@ const Create: React.FC = () => {
   ) => {
     if (parentBenefitId !== null) {
       const parentPlanSelection = getCurrentPlan(parentBenefitId)
-      const parentBenefit = BenefitSelections.find((benefit) => benefit.id === parentBenefitId)
+      const parentBenefit = CBenefitSelections.find((benefit) => benefit.id === parentBenefitId)
       const parentPlan = parentBenefit?.plans.find((plan) => plan.id === parentPlanSelection?.planValue)
       const parentIndexOption =
         parentPlan?.options.findIndex((option) => option.id === parentPlanSelection?.optionValue) ?? -1
@@ -219,7 +219,7 @@ const Create: React.FC = () => {
       }
 
       const currentPlanSelection = getCurrentPlan(benefitId)
-      const currentBenefit = BenefitSelections.find((benefit) => benefit.id === benefitId)
+      const currentBenefit = CBenefitSelections.find((benefit) => benefit.id === benefitId)
       const currentPlan = currentBenefit?.plans.find((plan) => plan.id === currentPlanSelection?.planValue)
       const currentIndexOption = currentPlan?.options.findIndex((option) => option.id === newValue) ?? -1
 
@@ -234,7 +234,7 @@ const Create: React.FC = () => {
       updateOptionValue(benefitId, newValue)
 
       const childPlanSelection = getCurrentPlan(childBenefitId)
-      const childBenefit = BenefitSelections.find((benefit) => benefit.id === childBenefitId)
+      const childBenefit = CBenefitSelections.find((benefit) => benefit.id === childBenefitId)
       const childPlan = childBenefit?.plans.find((plan) => plan.id === childPlanSelection?.planValue)
       const childIndexOption =
         childPlan?.options.findIndex((option) => option.id === childPlanSelection?.optionValue) ?? -1
@@ -244,7 +244,7 @@ const Create: React.FC = () => {
       }
 
       const currentPlanSelection = getCurrentPlan(benefitId)
-      const currentBenefit = BenefitSelections.find((benefit) => benefit.id === benefitId)
+      const currentBenefit = CBenefitSelections.find((benefit) => benefit.id === benefitId)
       const currentPlan = currentBenefit?.plans.find((plan) => plan.id === currentPlanSelection?.planValue)
       const currentIndexOption = currentPlan?.options.findIndex((option) => option.id === newValue) ?? -1
 
@@ -254,7 +254,7 @@ const Create: React.FC = () => {
     }
   }
 
-  const updateBenefitToggle = (benefit: BenefitToggleType, isDetail: boolean) => ({
+  const updateBenefitToggle = (benefit: TBenefitToggleType, isDetail: boolean) => ({
     ...benefit,
     isToggle: isDetail ? benefit.isToggle : !benefit.isToggle,
     isDetailToggle: isDetail ? !benefit.isDetailToggle : benefit.isDetailToggle,
@@ -341,7 +341,7 @@ const Create: React.FC = () => {
         </Card>
 
         {/*Benefit list*/}
-        {BenefitSelections.map((benefit) => (
+        {CBenefitSelections.map((benefit) => (
           <div key={benefit.id.toString()} className={currentStep === benefit.page ? "block" : "hidden"}>
             <Card className="h-full">
               <CardContent className="px-0 lg:px-3">

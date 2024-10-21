@@ -2,11 +2,11 @@
 
 import type {FC} from "react"
 import {useEffect, useState} from "react"
-import type {User} from "@/types/User"
+import type {TUser} from "@/types/User"
 import {usePathname} from "next/navigation"
-import {Routers} from "@/types/Router"
+import {CRouters} from "@/types/Router"
 import Link from "next/link"
-import {HeaderNavs} from "@/components/Header/constants"
+import {CHeaderNavs} from "@/components/Header/constants"
 import {ArrowRightStartOnRectangleIcon, UserCircleIcon, UserIcon} from "@heroicons/react/24/outline"
 import {useToast} from "@/components/Toast/useToast"
 import {
@@ -23,9 +23,11 @@ import {cn} from "@/lib/utils"
 import axios from "axios"
 import {LOGOUT_URL} from "@/lib/apiEndPoints"
 import {signOut, useSession} from "next-auth/react"
+import {authOptions, IAuthUser} from "@/app/api/auth/[...nextauth]/authOptions";
+import {getServerSession} from "next-auth/next";
 
 interface HeaderProps {
-  user: User | null
+  user: TUser | null
 }
 
 const Header: FC<HeaderProps> = ({user}) => {
@@ -35,7 +37,7 @@ const Header: FC<HeaderProps> = ({user}) => {
   const currentPath = usePathname()
   const [isNavOpen, setIsNavOpen] = useState(false)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const isLogin = Routers.some((router) => currentPath.includes(router.path))
+  const isLogin = CRouters.some((router) => currentPath.includes(router.path))
 
   const toggleMenu = () => {
     setTimeout(() => {
@@ -75,14 +77,14 @@ const Header: FC<HeaderProps> = ({user}) => {
   }, [isDropdownOpen])
 
   return isLogin ? (
-    <header id="header" className="bg-white sticky z-30 top-0 left-0 right-0 shadow-md">
+    <header id="header" className="bg-white sticky z-30 top-0 left-0 right-0 border">
       <div className="container mx-auto flex justify-between items-center py-2 px-4">
         <Link href="/" className="flex justify-center w-30 lg:w-[8%]">
           <Logo />
         </Link>
         <div className="hidden lg:block">
           <div className="items-center justify-between md:gap-12 text-lg hidden lg:flex">
-            {HeaderNavs.map((value) => (
+            {CHeaderNavs.map((value) => (
               <Link key={value.id.toString()} href={value.href} className="flex flex-col gap-5">
                 <p className="text-black font-semibold">{value.value}</p>
               </Link>
@@ -152,14 +154,14 @@ const Header: FC<HeaderProps> = ({user}) => {
       </div>
       {isDropdownOpen && (
         <nav className="lg:hidden absolute text-sm right-0 left-0 flex flex-col border-t min-h-screen bg-gray-100 shadow-lg">
-          {HeaderNavs.map((value, index) => (
+          {CHeaderNavs.map((value, index) => (
             <Link
               onClick={() => {
                 toggleMenu()
               }}
               key={value.id.toString()}
               href={value.href}
-              className={cn(HeaderNavs.length === index + 1 && "mb-4", "p-4 border-b bg-white shadow-md")}
+              className={cn(CHeaderNavs.length === index + 1 && "mb-4", "p-4 border-b bg-white shadow-md")}
             >
               <p className="text-black font-semibold">{value.value}</p>
             </Link>

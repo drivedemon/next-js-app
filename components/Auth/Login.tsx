@@ -10,14 +10,14 @@ import {Label} from "@/components/Forms/Label"
 import {Input} from "@/components/Forms/Input"
 import {useToast} from "@/components/Toast/useToast"
 import SubmitButton from "@/components/Forms/SubmitButton"
-import type {AuthLoginType} from "@/types/Auth"
+import type {TAuthLoginType} from "@/types/Auth"
 
 type LoginProps = {}
 
 const Login: FC<LoginProps> = () => {
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)
-  const [authState, setAuthState] = useState<AuthLoginType>({
+  const [authState, setAuthState] = useState<TAuthLoginType>({
     username: "",
     password: "",
   })
@@ -64,9 +64,10 @@ const Login: FC<LoginProps> = () => {
       })
     setLoading(false)
   }
+
   return (
-    <form onSubmit={handleSubmit} className="px-4 lg:px-10 py-8 grid gap-3">
-      <div className="grid gap-1">
+    <form onSubmit={handleSubmit} className="px-4 lg:px-10 grid gap-3">
+      <div className="flex flex-col gap-y-2">
         <Label htmlFor="username">Username</Label>
         <Input
           id="username"
@@ -87,8 +88,8 @@ const Login: FC<LoginProps> = () => {
         />
         <span className="text-red-500 text-sm">{errors?.password?.[0]}</span>
       </div>
-      <div className="mx-auto">
-        <SubmitButton className="mx-10 text-white" disabled={loading}>
+      <div className="sm:mx-auto">
+        <SubmitButton className="w-full md:px-20 lg:px-16" disabled={loading}>
           Sign In
         </SubmitButton>
       </div>

@@ -5,21 +5,21 @@ import type React from "react"
 import {useEffect, useReducer} from "react"
 import {cn} from "@/lib/utils"
 
-export interface SubMenuClaimType {
+export interface ISubMenuClaimType {
   key: string
   value: string
 }
 
 interface SubMenuTabProps {
-  claimTypeState: ({key, value}: SubMenuClaimType) => void
+  claimTypeState: ({key, value}: ISubMenuClaimType) => void
 }
 
 export const claimTypePage = ["track", "completed"]
 export const claimTypeDisplay = ["Track Claims", "Completed Claims"]
 
 const ClaimSubMenu: FC<SubMenuTabProps> = ({claimTypeState}: SubMenuTabProps) => {
-  const initState: SubMenuClaimType = {key: claimTypePage[0], value: claimTypeDisplay[0]}
-  const claimTypeReducer = (state: SubMenuClaimType, action: {type: string}) => {
+  const initState: ISubMenuClaimType = {key: claimTypePage[0], value: claimTypeDisplay[0]}
+  const claimTypeReducer = (state: ISubMenuClaimType, action: {type: string}) => {
     switch (action.type) {
       case claimTypePage[0]:
         return {key: claimTypePage[0], value: claimTypeDisplay[0]}
@@ -39,7 +39,7 @@ const ClaimSubMenu: FC<SubMenuTabProps> = ({claimTypeState}: SubMenuTabProps) =>
   }, [claimType, claimTypeState])
 
   return (
-    <div className="lg:px-3 flex gap-x-0.5">
+    <div className="lg:px-3 flex">
       {claimTypePage.map((type, index) => (
         <div
           key={type}
@@ -47,8 +47,8 @@ const ClaimSubMenu: FC<SubMenuTabProps> = ({claimTypeState}: SubMenuTabProps) =>
             setClaimType(type)
           }}
           className={cn(
-            claimType.key === type && "shadow-brand-primary text-brand-primary",
-            "border border-t-0 cursor-pointer shadow-md hover:shadow-brand-primary py-3 px-4 rounded-b-lg font-semibold",
+            claimType.key === type && "border-brand-primary text-brand-primary",
+            "border border-t-0 cursor-pointer hover:border-brand-primary py-3 px-4 rounded-b-lg text-base lg:text-lg font-semibold",
           )}
         >
           {claimTypeDisplay[index]}

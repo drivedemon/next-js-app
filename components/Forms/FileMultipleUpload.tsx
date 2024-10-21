@@ -1,11 +1,11 @@
 "use client"
 
 import {type FC, useEffect, useRef, useState} from "react"
-import {cn} from "@/lib/utils"
+import {cn, getFilePreviews} from "@/lib/utils"
 import PdfIcon from "@/components/Icons/PdfIcon"
 import JpgIcon from "@/components/Icons/JpgIcon"
 import PngIcon from "@/components/Icons/PngIcon"
-import Image from "next/image"
+import {LoaderIcon} from "lucide-react"
 
 interface FileMultipleUploadProps {
   callbackFileEvent: (file: [] | null) => void
@@ -20,15 +20,6 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
 
   useEffect(() => {
     if (files) {
-      setFilesPreview([])
-      files.map((file: any) => {
-        const fileReader = new FileReader()
-        fileReader.onload = () => {
-          setFilesPreview((prev: any) => [...prev, fileReader.result as string])
-        }
-        fileReader.readAsDataURL(file)
-      })
-
       callbackFileEvent(files)
       callbackFilePreviewEvent(files)
     } else {
@@ -39,16 +30,23 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
     }
   }, [files])
 
-  const handleChange = (e: any) => {
+  const handleChange = async (e: any) => {
     e.preventDefault()
     if (e.target.files?.[0]) {
       for (let i = 0; i < e.target.files.length; i++) {
         setFiles((prevState: any) => [...prevState, e.target.files[i]])
       }
+      const fileArray = Array.from(e.target.files)
+      try {
+        const previews = await getFilePreviews(fileArray)
+        previews.map((preview) => setFilesPreview((prev: any) => [...prev, preview]))
+      } catch (error) {
+        console.error("Error reading files:", error)
+      }
     }
   }
 
-  const handleDrop = (e: any) => {
+  const handleDrop = async (e: any) => {
     if (files.length >= 5) {
       return
     }
@@ -59,6 +57,13 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
     if (e.dataTransfer.files?.[0]) {
       for (let i = 0; i < e.dataTransfer.files.length; i++) {
         setFiles((prevState: any) => [...prevState, e.dataTransfer.files[i]])
+      }
+      const fileArray = Array.from(e.dataTransfer.files)
+      try {
+        const previews = await getFilePreviews(fileArray)
+        previews.map((preview) => setFilesPreview((prev: any) => [...prev, preview]))
+      } catch (error) {
+        console.error("Error reading files:", error)
       }
     } else {
       // toast alert
@@ -86,6 +91,7 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
   const removeFile = (fileName: any, index: number) => {
     const newArr = [...files]
     newArr.splice(index, 1)
+    filesPreview.splice(index, 1)
     setFiles([])
     setFiles(newArr)
   }
@@ -158,16 +164,30 @@ const FileMultipleUpload: FC<FileMultipleUploadProps> = ({callbackFileEvent, cal
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 place-items-center py-4 w-full">
         {files.map((file: any, index: number) =>
-          file.type.includes("image") && filesPreview[index] ? (
-            <img key={index.toString()} src={filesPreview[index]} className="w-full h-[13rem] rounded" alt="Preview" />
+          filesPreview[index] !== undefined ? (
+            file.type.includes("image") ? (
+              <img
+                key={index.toString()}
+                src={filesPreview[index]}
+                className="w-full h-[13rem] rounded"
+                alt="Preview"
+              />
+            ) : (
+              <div
+                key={index.toString()}
+                className="w-full h-[13rem] rounded bg-blue-50 flex items-center justify-center"
+              >
+                <div className="w-20 h-20 text-brand-primary">
+                  <PdfIcon />
+                </div>
+              </div>
+            )
           ) : (
             <div
               key={index.toString()}
               className="w-full h-[13rem] rounded bg-blue-50 flex items-center justify-center"
             >
-              <div className="w-20 h-20 text-brand-primary">
-                <PdfIcon />
-              </div>
+              <LoaderIcon className="w-10 h-10 text-brand-primary" />
             </div>
           ),
         )}

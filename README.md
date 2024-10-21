@@ -16,11 +16,14 @@
 
 ## Component plugin
 
-- ShadCN
+- ShadCN (First priority)
+- Flowbite (Second priority)
 
 Auto generate base component
 
 Check out document: [ShadCN document](https://ui.shadcn.com/docs)
+
+Check out document: [Flowbite document](https://flowbite-react.com/docs/components/accordion)
 
 ### command to use
 ```

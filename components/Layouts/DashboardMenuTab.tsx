@@ -5,9 +5,16 @@ import {useEffect} from "react"
 import Link from "next/link"
 import {usePathname} from "next/navigation"
 
+interface IMenuItem {
+  key: string
+  name: string
+  event: () => void
+}
+
 interface MenuItem {
   key: string
   name: string
+  children?: IMenuItem[] | []
   event: () => void
 }
 
@@ -16,7 +23,7 @@ interface DashboardMenuTabProps {
   current: string | null
 }
 
-const DashboardMenuTab: React.FC<DashboardMenuTabProps> = ({menu, current}) => {
+const DashboardMenuTab: React.FC<DashboardMenuTabProps> = ({menu, current}: DashboardMenuTabProps) => {
   const currentPath = usePathname()
 
   useEffect(() => {
@@ -48,17 +55,36 @@ const DashboardMenuTab: React.FC<DashboardMenuTabProps> = ({menu, current}) => {
       <Card className="lg:min-h-32 sticky shadow-brand-primary">
         <CardContent className="flex flex-col gap-y-6 text-base font-semibold">
           {menu.map((value, index) => (
-            <div
-              key={index.toString()}
-              className={cn(current === value.key ? "text-brand-primary" : "hover:underline")}
-            >
-              <Link
-                href={`/${currentPath.split("/")[1] ?? "dashboard"}`}
-                onClick={value.event}
-                className="cursor-pointer"
-              >
-                {value.name}
-              </Link>
+            <div key={index.toString()}>
+              {typeof value.children === "undefined" ? (
+                <Link
+                  href={`/${currentPath.split("/")[1] ?? "dashboard"}`}
+                  onClick={value.event}
+                  className={cn(current === value.key && "text-brand-primary", "cursor-pointer hover:underline")}
+                >
+                  {value.name}
+                </Link>
+              ) : (
+                <div>
+                  <p>{value.name}</p>
+                  <ul className="list-disc list-inside mt-3 ml-1 space-y-2">
+                    {value.children.map((children, index2) => (
+                      <li key={index2.toString()}>
+                        <Link
+                          href={`/${currentPath.split("/")[1] ?? "dashboard"}`}
+                          onClick={children.event}
+                          className={cn(
+                            current === children.key && "text-brand-primary",
+                            "cursor-pointer hover:underline",
+                          )}
+                        >
+                          {children.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ))}
         </CardContent>

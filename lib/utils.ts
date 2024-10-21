@@ -70,3 +70,23 @@ export const moneyDecimal = (number: number | null | undefined) => {
   const value = number ?? 0
   return new Intl.NumberFormat("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(value)
 }
+
+export const getFilePreviews = (files: any): Promise<string[]> => {
+  return Promise.all(
+    files.map((file: any) => {
+      return new Promise<string>((resolve, reject) => {
+        const fileReader = new FileReader()
+
+        fileReader.onload = () => {
+          resolve(fileReader.result as string)
+        }
+
+        fileReader.onerror = (error) => {
+          reject(error)
+        }
+
+        fileReader.readAsDataURL(file)
+      })
+    }),
+  )
+}

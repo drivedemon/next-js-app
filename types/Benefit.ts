@@ -30,7 +30,7 @@ export type BenefitSelection = {
   childBenefitId: number | null
 }
 
-export const BenefitSelections: BenefitSelection[] = [
+export const CBenefitSelections: BenefitSelection[] = [
   {
     id: 1,
     page: 1,

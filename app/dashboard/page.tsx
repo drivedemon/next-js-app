@@ -1,21 +1,20 @@
-"use client"
-
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/Card"
-import {Building2, CreditCard, FileInput, FileText, ListTodo, Umbrella} from "lucide-react"
 import {Button} from "@/components/Forms/Button"
 import type React from "react"
-import {usePage} from "@/components/Layouts/DashboardContext"
-import Link from "next/link"
-import {useSession} from "next-auth/react"
+import getDashboard from "@/lib/dashboardService"
+import {authOptions, type IAuthUserSession} from "@/app/api/auth/[...nextauth]/authOptions"
+import {getServerSession} from "next-auth/next"
+import type {TDashboardModule} from "@/types/Dashboard"
+import DashboardModule from "@/components/Dashboard/DashboardModule"
 
-const Dashboard: React.FC = () => {
-  const {setPage} = usePage()
-  const {data: session, status, update} = useSession()
+const Dashboard: React.FC = async () => {
+  const session: IAuthUserSession | null = await getServerSession(authOptions)
+  const getDashboardModules: TDashboardModule[] | null = await getDashboard(session?.user || null)
 
   return (
     <div className="gap-y-4 flex-col items-center grid lg:max-w-none lg:grid-cols-12 lg:items-start lg:px-0">
       <div className="lg:col-span-3 lg:px-4 h-full flex flex-col lg:border-r border-gray-300">
-        <Card className="shadow-brand-primary">
+        <Card>
           <CardHeader className="text-center border-b border-gray-500">
             {JSON.stringify(session)}
 
@@ -35,7 +34,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="lg:col-span-9 grid grid-cols-12 gap-6 lg:px-4">
         <div className="col-span-12">
-          <Card className="shadow-brand-primary h-full">
+          <Card className="h-full">
             <CardHeader>
               <CardTitle>Message Board</CardTitle>
             </CardHeader>
@@ -53,103 +52,7 @@ const Dashboard: React.FC = () => {
           </Card>
         </div>
 
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Link href="/benefits" onClick={() => setPage("benefit_overview")}>
-            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-              <CardHeader className="px-0">
-                <CardTitle className="flex gap-x-2">
-                  <Umbrella className="text-brand-primary" />
-                  <span className="text-lg font-semibold">Benefits Coverage</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-0">
-                <p className="text-sm">description</p>
-              </CardContent>
-              <CardFooter />
-            </Card>
-          </Link>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4 min-h-20">
-          <Link href="/benefits" onClick={() => setPage("benefit_document")}>
-            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-              <CardHeader className="px-0">
-                <CardTitle className="flex gap-x-2">
-                  <FileText className="text-brand-primary" />
-                  <span className="text-lg font-semibold">Policy Document</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-0">
-                <p className="text-sm">description</p>
-              </CardContent>
-              <CardFooter />
-            </Card>
-          </Link>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Link href="/claims" onClick={() => setPage("claim_create")}>
-            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-              <CardHeader className="px-0">
-                <CardTitle className="flex gap-x-2">
-                  <FileInput className="text-brand-primary" />
-                  <span className="text-lg font-semibold">Submit claims</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-0">
-                <p className="text-sm">description</p>
-              </CardContent>
-              <CardFooter />
-            </Card>
-          </Link>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Link href="/claims" onClick={() => setPage("claim_track")}>
-            <Card className="shadow-brand-primary hover:drop-shadow-lg cursor-pointer h-full">
-              <CardHeader className="px-0">
-                <CardTitle className="flex gap-x-2">
-                  <ListTodo className="text-brand-primary" />
-                  <span className="text-lg font-semibold">Track claims</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-0">
-                <p className="text-sm">description</p>
-              </CardContent>
-              <CardFooter />
-            </Card>
-          </Link>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4">
-          <Card className="shadow-brand-primary opacity-50 hover:drop-shadow-lg cursor-not-allowed h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <CreditCard className="text-brand-primary" />
-                <span className="text-lg font-semibold">eCard</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">description</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
-        </div>
-
-        <div className="col-span-12 sm:col-span-6 lg:col-span-4 min-h-20">
-          <Card className="shadow-brand-primary opacity-50 hover:drop-shadow-lg cursor-not-allowed h-full">
-            <CardHeader className="px-0">
-              <CardTitle className="flex gap-x-2">
-                <Building2 className="text-brand-primary" />
-                <span className="text-lg font-semibold">Clinics</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <p className="text-sm">description</p>
-            </CardContent>
-            <CardFooter />
-          </Card>
-        </div>
+        <DashboardModule modules={getDashboardModules} />
       </div>
     </div>
   )
